@@ -71,3 +71,8 @@ class Mapa:
         direc2 = ARR
 
     U2.conex[direc2] = U1
+  
+
+  # Mueve la ubicacion actual en la direccion dada
+  def mover(self, direc):
+    self.actual = self.actual.conex[direc]
