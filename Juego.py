@@ -1,5 +1,4 @@
 from Mapa import *
-from colorama import Fore, Back
 
 mapa = Mapa()
 
@@ -15,30 +14,27 @@ def obtenerNumDireccion(string):
 
 
 while True:
-  print(f"\n{Fore.GREEN}Estas actualmente en {mapa.actual.nombre}")
-  print(Fore.RESET)  
+  print(f"\nEstas actualmente en {mapa.actual.nombre}")
 
   arriba = mapa.actual.conex[ARR]
   abajo = mapa.actual.conex[ABJ]
   izquier = mapa.actual.conex[IZQ]
   derecha = mapa.actual.conex[DER]
 
-  print("Hacia donde te deseas mover?")
-  print(Fore.RESET + " - Arriba:   ", Fore.GREEN + arriba.nombre if arriba is not None else Fore.RED + "NADA")
-  print(Fore.RESET + " - Abajo:    ", Fore.GREEN + abajo.nombre if abajo is not None else Fore.RED + "NADA")
-  print(Fore.RESET + " - Izquierda:", Fore.GREEN + izquier.nombre if izquier is not None else Fore.RED + "NADA")
-  print(Fore.RESET + " - Derecha:  ", Fore.GREEN + derecha.nombre if derecha is not None else Fore.RED + "NADA")
+  print("Hacia donde te deseas mover? (Escribe la direccion en minuscula)")
+  print(f" - Arriba:    {arriba.nombre if arriba is not None else "NADA"}")
+  print(f" - Abajo:     {abajo.nombre if abajo is not None else "NADA"}")
+  print(f" - Izquierda: {izquier.nombre if izquier is not None else "NADA"}")
+  print(f" - Derecha:   {derecha.nombre if derecha is not None else "NADA"}")
   
-  print(Back.WHITE + Fore.BLUE)
   string = input("--> ")
-  print(Back.RESET)
   
   direc = obtenerNumDireccion(string)
   if direc == -1:
-    print(f"{Fore.RED}Direccion no valida{Fore.RESET}")
+    print("Direccion no valida")
     continue
   
   if mapa.actual.conex[direc] is not None:
     mapa.mover(direc)
   else:
-    print(F"{Fore.RED}No hay nada en esa direccion{Fore.RESET}")
+    print("No hay nada en esa direccion")
