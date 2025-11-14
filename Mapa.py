@@ -6,9 +6,11 @@
 # conex[2] : arriba
 # conex[3] : abajo
 class Ubicacion:
-  def __init__(self, nombre):
+  def __init__(self, nombre, descripcion, esRuta=True):
     self.nombre = nombre
+    self.descrip = descripcion
     self.conex = [None] * 4
+    self.esRuta = esRuta
 
 # Constantes de direccion
 IZQ = 0
@@ -19,20 +21,32 @@ ABJ = 3
 class Mapa:
   def __init__(self):
     # Crear los lugares que componen el mapa
-    aldea = Ubicacion("Aldea principal")
-    lago = Ubicacion("Lago sagrado")
-    campamento = Ubicacion("Campamento")
-    mazmorra = Ubicacion("Mazmorra")
-    castillo = Ubicacion("Castillo antiguo")
-    bosque = Ubicacion("Bosque encantado")
+    aldea = Ubicacion("Aldea principal",
+      "Tu hogar desde niño")
+    lago = Ubicacion("Lago sagrado",
+      "Dicen que si tocas esta agua tendras una muerte indeseable. Cuidado!")
+    campamento = Ubicacion("Campamento", 
+      "")
+    mazmorra = Ubicacion("Mazmorra",
+      "")
+    castillo = Ubicacion("Castillo antiguo",
+      "")
+    bosque = Ubicacion("Bosque encantado",
+      "")
 
     # Crear las rutas que conectan los lugares
-    ruta1 = Ubicacion("Ruta 1")
-    ruta2 = Ubicacion("Ruta 2")
-    ruta3 = Ubicacion("Ruta 3")
-    ruta4 = Ubicacion("Ruta 4")
-    ruta5 = Ubicacion("Ruta 5")
-    ruta6 = Ubicacion("Ruta 6")
+    ruta1 = Ubicacion("Ruta 1",
+      "", True)
+    ruta2 = Ubicacion("Ruta 2",
+      "", True)
+    ruta3 = Ubicacion("Ruta 3",
+      "", True)
+    ruta4 = Ubicacion("Ruta 4",
+      "", True)
+    ruta5 = Ubicacion("Ruta 5",
+      "", True)
+    ruta6 = Ubicacion("Ruta 6",
+      "", True)
     
     # Establecer sus conexiones bidireccionales
     self.agregarconex(aldea, ABJ, ruta1)
