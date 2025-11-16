@@ -1,3 +1,6 @@
+from Personaje import *
+from cola import *
+
 # "Ubicación" representa un punto especifico del mapa. Tiene
 # un nombre y un arreglo de 4 elementos con las conexiones
 # a otras ubicaciones, ordenadas así:
@@ -11,6 +14,18 @@ class Ubicacion:
     self.descrip = descripcion
     self.conex = [None] * 4
     self.esRuta = esRuta
+    self.bloqueados = [False] * 4  # rutas bloqueadas
+    self.pP = Cola()  # personajes Pendientes
+    self.eP = Cola()  # enemigos Pendientes
+
+  def bloquear(self, direc):
+    self.bloqueados[direc] = True
+
+  def desbloquear(self, direc):
+    self.bloqueados[direc] = False
+
+  def estaBloqueado(self, direc):
+    return self.bloqueados[direc]
 
 # Constantes de direccion
 IZQ = 0
@@ -22,9 +37,10 @@ class Mapa:
   def __init__(self):
     # Crear los lugares que componen el mapa
     aldea = Ubicacion("Aldea principal",
-      "Tu hogar desde niño")
+      "")
     lago = Ubicacion("Lago sagrado",
-      "Dicen que si tocas esta agua tendras una muerte indeseable. Cuidado!")
+      "Dicen que si tocas el agua de este lago moriras de formas " +
+      "insospechables. Cuidado!")
     campamento = Ubicacion("Campamento", 
       "")
     mazmorra = Ubicacion("Mazmorra",
@@ -61,6 +77,13 @@ class Mapa:
     self.agregarconex(ruta6, IZQ, bosque)
     self.agregarconex(ruta6, ABJ, ruta5)
     self.agregarconex(ruta5, ABJ, campamento)
+
+    # Establecer los bloqueos iniciales
+    aldea.bloquear(DER)
+
+    # Añadir personajes
+    sabio = Sabio()
+    aldea.pP.enqueue(sabio)
 
     # Establecer la ubicacion actual inicial
     self.actual = aldea
