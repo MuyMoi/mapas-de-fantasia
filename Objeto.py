@@ -5,3 +5,6 @@ class Objeto:
 
   def agregarCantidad(self):
     self.cantidad += 1
+
+  def reducirCantidad(self):
+    self.cantidad -= 1
