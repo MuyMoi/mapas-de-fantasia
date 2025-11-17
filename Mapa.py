@@ -9,8 +9,8 @@ elementos con las conexiones a otras ubicaciones, ordenadas así:
 # conex[2] : arriba
 # conex[3] : abajo
 Ademas, tambien tiene un atributo "descrip" con la descripcion
-del lugar, "pP" es una cola donde se almacenan los personajes
-pendientes por hablar en la ubicacion, "eP" es otra cola con los
+del lugar, "CpP" es una cola donde se almacenan los personajes
+pendientes por hablar en la ubicacion, "CeP" es otra cola con los
 enemigos pendientes por vencer, "direcHuida" es la direccion en
 la cual el protagonista retrocede cuando huye o pierde contra
 algun enemigo. La direccion de huida es un numero entre 0 y 3,
