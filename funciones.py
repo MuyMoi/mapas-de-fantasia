@@ -1,3 +1,5 @@
+from os import system
+
 # funcion utilitaria para obtener el numero correspondiente
 # a una direccion (0,1,2,3) a partir de un string. Si no es
 # valido, retorna -1
@@ -41,3 +43,6 @@ Buena suerte!
 
 Presiona ENTER para iniciar la aventura''')
   input()
+
+def limpiarPantalla():
+  system("clear")

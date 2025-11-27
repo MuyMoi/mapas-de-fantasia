@@ -29,11 +29,29 @@ class Ubicacion:
     self.Lp = [None] * 2 # Lista de personajes
     self.direcHuida = direccionHuida
 
+
   def hayEnemigos(self):
     return not self.CeP.isEmpty()
 
   def hayPersonajes(self):
     return not self.CpP.isEmpty()
+
+  def agregarconex(self, direc, U2):
+    self.conex[direc] = U2
+    
+    direc2 = -1
+    if direc == IZQ:
+      direc2 = DER
+    elif direc == DER:
+      direc2 = IZQ
+    elif direc == ARR:
+      direc2 = ABJ
+    elif direc == ABJ:
+      direc2 = ARR
+    else:
+      return
+
+    U2.conex[direc2] = self
 
 
 # Constantes de direccion
@@ -62,64 +80,3 @@ def agregarconex(U1, direc, U2):
       direc2 = ARR
 
   U2.conex[direc2] = U1
-
-
-
-# Crear los lugares que componen el mapa
-
-aldea = Ubicacion("Aldea principal",
-  "")
-lago = Ubicacion("Lago sagrado",
-  "Dicen que si tocas el agua de este lago moriras de formas " +
-  "insospechables. Cuidado!",
-  direccionHuida=IZQ)
-campamento = Ubicacion("Campamento", 
-  "")
-mazmorra = Ubicacion("Mazmorra",
-  "",
-  direccionHuida=ARR)
-castillo = Ubicacion("Castillo antiguo",
-  "",
-  direccionHuida=ABJ)
-bosque = Ubicacion("Bosque encantado",
-  "",
-  direccionHuida=DER)
-
-
-# Crear las rutas que conectan los lugares
-
-ruta1 = Ubicacion("Ruta 1",
-  "")
-ruta2 = Ubicacion("Ruta 2",
-  "", direccionHuida=IZQ)
-ruta3 = Ubicacion("Ruta 3",
-  "")
-ruta4 = Ubicacion("Ruta 4",
-  "")
-ruta5 = Ubicacion("Ruta 5",
-  "", direccionHuida=ABJ)
-ruta6 = Ubicacion("Ruta 6",
-  "")
-
-
-# Establecer sus conexiones bidireccionales
-
-agregarconex(aldea, ABJ, ruta1)
-agregarconex(ruta1, DER, lago)
-agregarconex(aldea, DER, ruta2)
-agregarconex(ruta2, DER, campamento)
-agregarconex(campamento, DER, ruta3)
-agregarconex(ruta3, DER, ruta4)
-agregarconex(ruta4, ABJ, mazmorra)
-agregarconex(ruta4, ARR, castillo)
-agregarconex(castillo, IZQ, ruta6)
-agregarconex(ruta6, IZQ, bosque)
-agregarconex(ruta6, ABJ, ruta5)
-agregarconex(ruta5, ABJ, campamento)
-
-
-# Añadir personajes
-
-sabio = Personaje("Sabio Anciano",
-  '''Hola, joven! Soy un sabio anciano y puedo guiarte en...''')
-aldea.CpP.enqueue(sabio)

@@ -1,12 +1,67 @@
-
-from os import system
 from funciones import *
 from Protagonista import *
 
+# Crear los lugares que componen el mapa
 
-''' En este archivo se muestra la logica principal del juego,
-desde la parte introductoria hasta la toma de decisiones
-con respecto a enemigos, personajes y ubicaciones'''
+aldea = Ubicacion("Aldea principal",
+  "")
+lago = Ubicacion("Lago sagrado",
+  "Dicen que si tocas el agua de este lago moriras de formas " +
+  "insospechables. Cuidado!",
+  direccionHuida=IZQ)
+campamento = Ubicacion("Campamento", 
+  "")
+mazmorra = Ubicacion("Mazmorra",
+  "",
+  direccionHuida=ARR)
+castillo = Ubicacion("Castillo antiguo",
+  "",
+  direccionHuida=ABJ)
+bosque = Ubicacion("Bosque encantado",
+  "",
+  direccionHuida=DER)
+
+
+# Crear las rutas que conectan los lugares
+
+ruta1 = Ubicacion("Ruta 1",
+  "")
+ruta2 = Ubicacion("Ruta 2",
+  "", direccionHuida=IZQ)
+ruta3 = Ubicacion("Ruta 3",
+  "")
+ruta4 = Ubicacion("Ruta 4",
+  "")
+ruta5 = Ubicacion("Ruta 5",
+  "", direccionHuida=ABJ)
+ruta6 = Ubicacion("Ruta 6",
+  "")
+
+
+# Establecer sus conexiones bidireccionales
+
+aldea.agregarconex(ABJ, ruta1)
+ruta1.agregarconex(DER, lago)
+aldea.agregarconex(DER, ruta2)
+ruta2.agregarconex(DER, campamento)
+campamento.agregarconex(DER, ruta3)
+ruta3.agregarconex(DER, ruta4)
+ruta4.agregarconex(ABJ, mazmorra)
+ruta4.agregarconex(ARR, castillo)
+castillo.agregarconex(IZQ, ruta6)
+ruta6.agregarconex(IZQ, bosque)
+ruta6.agregarconex(ABJ, ruta5)
+ruta5.agregarconex(ABJ, campamento)
+
+
+# Añadir personajes
+
+sabio = Benevolente("Sabio Anciano", 0)
+aldea.CpP.enqueue(sabio)
+#aldea.Lp[0] = sabio
+
+
+
 
 
 # Introduccion
@@ -28,7 +83,7 @@ Comandos disponibles:
 ''')
   print("Escribe el comando en letras minusculas:")
   opc = input("-->")
-  system("cls")
+  limpiarPantalla()
 
   if opc == "ayuda":
     verAyuda()
@@ -54,7 +109,34 @@ print("Presiona ENTER para continuar")
 input()
 
 P = Protagonista(nombre)
+P.ubicActual = aldea
 
+
+# Añadir discursos
+
+sabio.discursos.insertarFinal(
+'''Ah… así que al fin has despertado, viajero.
+Primero que nada, dime: como te llamas?''')
+P.discursos[0].insertarFinal(
+f'''Me llamo {P.nombre}''')
+sabio.discursos.insertarFinal(
+f'''Encantado de conocerte, {P.nombre}. No es casualidad que
+tus pasos comiencen aquí. Este mundo, aunque pequeño, arde
+con antiguos conflictos que pocos recuerdan.
+El Bosque Encantado susurra advertencias, el Castillo Antiguo
+guarda secretos que aún respiran, y el Lago Sagrado... ya no es
+tan puro como solía ser. Muchos han partido por esas rutas y
+pocos han regresado con respuestas. Tú tienes en la mirada algo
+distinto… una voluntad que no se rinde con facilidad. Si deseas
+explorar, hazlo con prudencia. Cada sendero transforma a quien
+lo recorre. No busques solo tesoros: busca la verdad de este mundo.
+''')
+P.discursos[0].insertarFinal(
+f'''No sé por qué estoy aquí, pero siento que debo avanzar. Algo
+me llama desde más allá de la aldea. Gracias por advertirme, señor.
+Prometo no ignorar sus palabras. Volveré con respuestas… o no
+volveré en absoluto.
+''')
 
 
 # Parte principal
@@ -62,26 +144,16 @@ P = Protagonista(nombre)
 while True:
 # Se limpia la pantalla y se muestra la ubicacion actual
 
-  system("cls")
+  limpiarPantalla()
   print("\n-------------------------------------------------")
   print(f"Estas actualmente en {P.ubicActual.nombre}")
   print(P.ubicActual.descrip)
 
 
-# Aqui se informa al jugador si existe algun personaje
-# con quien haya que hablar primero para poder continuar
-
-  if P.ubicActual.hayPersonajes():
-    print("Hay un personaje en esta ubicacion que desa hablar contigo\n")
-    personaje = P.ubicActual.CpP.dequeue()
-    print(f"       {personaje.nombre}:")
-    personaje.hablar()
-
-
 # Si hay enemigos pendientes por vencer en la ubicacion actual,
 # se informa y se dan opciones
 
-  elif P.ubicActual.hayEnemigos():
+  if P.ubicActual.hayEnemigos():
     print("Un momento! Parece que hay amenazas...")
     enemigo = P.ubicActual.CeP.peek()
     print(f"Aparecio {enemigo.nombre}. Que deseas hacer?")
@@ -92,6 +164,23 @@ while True:
     elif opc == "luchar":
       print("aun no hay codigo para luchar")
 
+# Aqui se informa al jugador si existe algun personaje
+# con quien haya que hablar primero para poder continuar
+
+  elif P.ubicActual.hayPersonajes():
+    print("Hay un personaje en esta ubicacion que desa hablar contigo\n")
+    per = P.ubicActual.CpP.dequeue()
+    disc_per = per.discursos
+    disc_prot = P.discursos[per.id]
+    
+    while disc_per.actual is not None:
+      print(f"{per.nombre}: {disc_per.actual.dato}\n")
+      print(f"{P.nombre}: {disc_prot.actual.dato}")
+      disc_per.avanzar_ptr()
+      disc_prot.avanzar_ptr()
+
+    disc_per.reiniciar_ptr()
+    disc_prot.reiniciar_ptr()
 
 
 # Si no hay nada pendiente, se ofrecen las siguientes opciones
@@ -99,12 +188,13 @@ while True:
   else:
     print("Que deseas hacer?")
     print("inventario: Ver el inventario de objetos")
+    print("stats     : Ver tus estadisticas")
     print("mover     : Moverte de mapa")
-    print("hablar    : Hablar con un personaje")
+    #print("hablar    : Hablar con un personaje")  #########
     print("salir     : Salir del juego")
     opc = input("--> ")
 
-    system("cls")
+    limpiarPantalla()
 
 # Mostrar el inventario del protagonista
 
@@ -112,6 +202,11 @@ while True:
       print("    INVENTARIO")
       P.verInventario()
 
+# Mostrar las estadisticas
+
+    elif opc == "stats":
+      print(f"    ESTADISTICAS DE {P.nombre}")
+      P.verEstadisticas()
 
 # Mover al protagonista de ubicacion
 
@@ -141,8 +236,16 @@ while True:
 
 # Hablar con alguno de los personajes benevolentes que aparecieron
 # al llegar a la ubicacion
-    elif opc == "hablar":
-      pass
+      """    elif opc == "hablar":
+      if P.ubicActual.Lp[0] is None and P.ubicActual.Lp[0] is None:
+        print("No hay nadie en esta ubicacion")
+      else:
+        print("Escribe el numero del personaje con quien deseas hablar:")
+        for i in range(0, 2):
+          if P.ubicActual.Lp[i] is not None:
+            print(f"{i+1}: {P.ubicActual.Lp[i].nombre}")
+      """
+
 
 
 # Salir del juego
