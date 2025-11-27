@@ -39,6 +39,7 @@ ruta6 = Ubicacion("Ruta 6",
 
 
 # Establecer sus conexiones bidireccionales
+# Por ejemplo: partiendo de la aldea, ABAJO, esta la ruta 1
 
 aldea.agregarconex(ABJ, ruta1)
 ruta1.agregarconex(DER, lago)
@@ -58,8 +59,9 @@ ruta5.agregarconex(ABJ, campamento)
 
 sabio = Benevolente("Sabio Anciano", 0)
 aldea.CpP.enqueue(sabio)
-#aldea.Lp[0] = sabio
 
+exploradora = Benevolente("Exploradora Errante", 3)
+campamento.CpP.enqueue(exploradora)
 
 
 
@@ -114,11 +116,14 @@ P.ubicActual = aldea
 
 # Añadir discursos
 
+#SABIO
+
 sabio.discursos.insertarFinal(
 '''Ah… así que al fin has despertado, viajero.
 Primero que nada, dime: como te llamas?''')
 P.discursos[0].insertarFinal(
-f'''Me llamo {P.nombre}''')
+f'''Me llamo {P.nombre}
+''')
 sabio.discursos.insertarFinal(
 f'''Encantado de conocerte, {P.nombre}. No es casualidad que
 tus pasos comiencen aquí. Este mundo, aunque pequeño, arde
@@ -138,6 +143,26 @@ Prometo no ignorar sus palabras. Volveré con respuestas… o no
 volveré en absoluto.
 ''')
 
+#EXPLORADORA ERRANTE:
+
+exploradora.discursos.insertarFinal(
+'''No esperaba ver a alguien nuevo por estos caminos. Normalmente
+solo pasan comerciantes desesperados o guerreros que no regresan.
+Yo vigilo este campamento para quienes se atreven a cruzar el
+corazón del mapa. Desde aquí se siente cómo las rutas se tensan,
+como si el mundo respirara antes de una tormenta. La ruta 3 es
+relativamente segura… si sabes escuchar. La ruta 5, en cambio,
+está manchada por algo que no pertenece a este tiempo. He visto
+sombras moverse sin cuerpo. Si sigues adelante, guarda provisiones,
+guarda fuerzas… y guarda recuerdos. A veces eso es lo único que
+regresa contigo.
+''')
+P.discursos[3].insertarFinal(
+'''No pensé encontrar a alguien tan lejos de la aldea. Gracias por
+la hospitalidad. Tu advertencia no caerá en oídos sordos. Seguiré
+adelante, pero lo haré con cautela. Quizás, cuando todo termine,
+este campamento ya no sea solo un lugar de paso.
+''')
 
 # Parte principal
 
