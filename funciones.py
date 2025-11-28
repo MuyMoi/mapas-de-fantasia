@@ -45,7 +45,8 @@ Presiona ENTER para iniciar la aventura''')
   input()
 
 def limpiarPantalla():
-  system("clear")
+  #system("clear")
+  pass
 
 def verDiscurso(protagonista, personaje):
   discurso1 = personaje.discursos

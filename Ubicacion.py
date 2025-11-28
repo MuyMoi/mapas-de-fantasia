@@ -21,10 +21,7 @@ pendientes por hablar en la ubicacion, "CeP" es otra cola con los
 enemigos pendientes por vencer, "direcHuida" es la direccion en
 la cual el protagonista retrocede cuando huye o pierde contra
 algun enemigo. La direccion de huida es un numero entre 0 y 3,
-o bien -1 si la ubicacion no necesita direccion hacia donde huir.
-Por ultimo, "Lp" es la lista (o mejor dicho arreglo) de personajes
-que existen. Se utiliza para poder seguir hablando con los
-personajes, incluso despues de que desaparecen de la cola.'''
+o bien -1 si la ubicacion no necesita direccion hacia donde huir.'''
 
 class Ubicacion:
   def __init__(self, nombre, descripcion, direccionHuida = -1):
@@ -33,7 +30,6 @@ class Ubicacion:
     self.conex = [None] * 4
     self.benev_pend = Cola()  # Cola Benevolentes Pendientes
     self.enem_pend = Cola()   # Cola enemigos Pendientes
-    #self.Lp = [None] * 2     # Lista de personajes
     self.direcHuida = direccionHuida
 
 # comprobar si hay enemigos por vencer en la ubicacion actual
