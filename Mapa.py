@@ -1,5 +1,12 @@
-from Personaje import *
+from Benevolente import *
+from Enemigo import *
 from cola import *
+
+# Constantes de direccion
+IZQ = 0
+DER = 1
+ARR = 2
+ABJ = 3
 
 '''"Ubicación" representa un punto especifico del mapa. "nombre"
 es un string con el nombre del lugar, "conex" es un arreglo de 4
@@ -24,17 +31,28 @@ class Ubicacion:
     self.nombre = nombre
     self.descrip = descripcion
     self.conex = [None] * 4
-    self.CpP = Cola()  # Cola personajes Pendientes
-    self.CeP = Cola()  # Cola enemigos Pendientes
-    self.Lp = [None] * 2 # Lista de personajes
+    self.benev_pend = Cola()  # Cola Benevolentes Pendientes
+    self.enem_pend = Cola()   # Cola enemigos Pendientes
+    #self.Lp = [None] * 2     # Lista de personajes
     self.direcHuida = direccionHuida
 
+# comprobar si hay enemigos por vencer en la ubicacion actual
 
   def hayEnemigos(self):
-    return not self.CeP.isEmpty()
+    return not self.enem_pend.isEmpty()
 
-  def hayPersonajes(self):
-    return not self.CpP.isEmpty()
+# comprobar si hay personajes buenos que quieran hablar
+
+  def hayBenevolentes(self):
+    return not self.benev_pend.isEmpty()
+
+  def verUbicacionHuida(self):
+    return self.conex[self.direcHuida].nombre
+
+# El siguiente metodo añade una conexion de forma bidireccional
+# desde la ubicacion actual en direccion "direc" hacia U2. Es
+# decir, que U2 tambien hara referencia, en la direccion contraria,
+# a U1
 
   def agregarconex(self, direc, U2):
     self.conex[direc] = U2
@@ -52,31 +70,3 @@ class Ubicacion:
       return
 
     U2.conex[direc2] = self
-
-
-# Constantes de direccion
-IZQ = 0
-DER = 1
-ARR = 2
-ABJ = 3
-
-
-# El siguiente metodo añade una conexion de forma bidireccional
-# desde U1 en la direccion "direc" hacia U2. Es decir, que
-# U2 tambien hara referencia, en la direccion contraria, a U1
-
-def agregarconex(U1, direc, U2):
-  U1.conex[direc] = U2
-  direc2 = -1
-
-  match direc:
-    case 0:
-      direc2 = DER
-    case 1:
-      direc2 = IZQ
-    case 2:
-      direc2 = ABJ
-    case 3:
-      direc2 = ARR
-
-  U2.conex[direc2] = U1

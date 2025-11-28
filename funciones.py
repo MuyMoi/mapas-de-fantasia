@@ -46,3 +46,16 @@ Presiona ENTER para iniciar la aventura''')
 
 def limpiarPantalla():
   system("clear")
+
+def verDiscurso(protagonista, personaje):
+  discurso1 = personaje.discursos
+  discurso2 = protagonista.discursos[personaje.id]
+
+  while discurso1.actual is not None:
+    print(f"{personaje.nombre}: {discurso1.actual.dato}")
+    print(f"{protagonista.nombre}: {discurso2.actual.dato}")
+    discurso1.avanzar_ptr()
+    discurso2.avanzar_ptr()
+
+  discurso1.reiniciar_ptr()
+  discurso2.reiniciar_ptr()

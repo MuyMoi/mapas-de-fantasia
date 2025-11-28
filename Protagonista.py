@@ -12,14 +12,16 @@ class Protagonista:
   def __init__(self, nombre):
     self.nombre=nombre
     self.XP=0
+    self.salud=100 
     self.lugaresVisitados=0
     self.enemDerrotados=0
-    self.inventario = [
-      Objeto("Monedas"),
-      Objeto("Pociones")]
+    self.inventario = [0] * 2
+    self.inventario[0] = Objeto("Monedas")
+    self.inventario[1] = Objeto("Pociones")
     self.numObjetos = 2
     self.ubicActual = None
-    self.discursos = [None] * 11
+    self.discursos = [0] * 11
+    
     for i in range(0, 11):
       self.discursos[i] = ListaEnlazadaSimple()
 
@@ -37,7 +39,7 @@ class Protagonista:
   def mover(self, direc):
     self.ubicActual = self.ubicActual.conex[direc]
 
-  def huir(self, direc):
+  def huir(self):
     A = self.ubicActual
     if A.direcHuida != -1:
       self.ubicActual = A.conex[A.direcHuida]

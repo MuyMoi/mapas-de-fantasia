@@ -18,7 +18,7 @@ castillo = Ubicacion("Castillo antiguo",
   "",
   direccionHuida=ABJ)
 bosque = Ubicacion("Bosque encantado",
-  "",
+  "El aire es frío y oyes ruidos entre los árboles",
   direccionHuida=DER)
 
 
@@ -58,16 +58,45 @@ ruta5.agregarconex(ABJ, campamento)
 # Añadir personajes
 
 sabio = Benevolente("Sabio Anciano", 0)
-aldea.CpP.enqueue(sabio)
+aldea.benev_pend.enqueue(sabio)
+
+espiritu = Enemigo("Espiritu del lago", 1)
+lago.enem_pend.enqueue(espiritu)
+
+# = Enemigo("", 2)
+#ruta2.enem_pend.enqueue()
 
 exploradora = Benevolente("Exploradora Errante", 3)
-campamento.CpP.enqueue(exploradora)
+campamento.benev_pend.enqueue(exploradora)
 
+''' = Enemigo("", 4)
+ruta5.enem_pend.enqueue()
 
+ = Benevolente("", 5)
+ruta3.benev_pend.enqueue()
+
+ = Enemigo("", 6)
+mazmorra.enem_pend.enqueue()
+
+ = Enemigo("", 7)
+castillo.enem_pend.enqueue()
+
+= Benevolente("", 8)
+castillo.benev_pend.enqueue()
+
+= Benevolente("", 9)
+ruta6.benev_pend.enqueue()
+
+ = Enemigo("", 10)
+bosque.enem_pend.enqueue()
+
+= Benevolente("", 11)
+bosque.benev_pend.enqueue()'''
 
 
 # Introduccion
 
+limpiarPantalla()
 while True:
   print('''
 ----------------------------------------
@@ -116,7 +145,7 @@ P.ubicActual = aldea
 
 # Añadir discursos
 
-#SABIO
+#SABIO (id=0)
 
 sabio.discursos.insertarFinal(
 '''Ah… así que al fin has despertado, viajero.
@@ -143,7 +172,26 @@ Prometo no ignorar sus palabras. Volveré con respuestas… o no
 volveré en absoluto.
 ''')
 
-#EXPLORADORA ERRANTE:
+# ESPIRITU DEL LAGO (id=1)
+
+espiritu.discursos.insertarFinal(
+'''Durante siglos fui guardián de aguas puras, reflejo del cielo y
+alivio de los vivos… hasta que los hombres arrojaron su ambición
+a mis entrañas. Ahora solo queda eco, veneno y lamentos. Tú no eres
+distinto a los demás. Vienes buscando poder, respuestas o gloria,
+pero todos terminan alimentando la oscuridad. Cada paso que das sobre
+estas orillas despierta los recuerdos de quienes se ahogaron en sus
+propios deseos. Si avanzas, tu reflejo será lo último que veas antes
+de perderte conmigo en el fondo.
+''')
+P.discursos[1].insertarFinal(
+'''No busco corromper lo que queda de este lugar. Pero tampoco
+retrocederé. Si tu dolor es lo que te convirtió en esto, entonces te
+liberaré… aunque tenga que enfrentar tu furia. El lago puede haber
+sido manchado, pero aún puede ser salvado.
+''')
+
+#EXPLORADORA ERRANTE: (id=3)
 
 exploradora.discursos.insertarFinal(
 '''No esperaba ver a alguien nuevo por estos caminos. Normalmente
@@ -170,56 +218,75 @@ while True:
 # Se limpia la pantalla y se muestra la ubicacion actual
 
   limpiarPantalla()
-  print("\n-------------------------------------------------")
   print(f"Estas actualmente en {P.ubicActual.nombre}")
   print(P.ubicActual.descrip)
-
+  print("\n-------------------------------------------------\n")
 
 # Si hay enemigos pendientes por vencer en la ubicacion actual,
 # se informa y se dan opciones
 
   if P.ubicActual.hayEnemigos():
-    print("Un momento! Parece que hay amenazas...")
-    enemigo = P.ubicActual.CeP.peek()
-    print(f"Aparecio {enemigo.nombre}. Que deseas hacer?")
-    print("huir  : Huir y regresar a la ruta anterior")
-    print("luchar: Arriesgarte y enfrentar a la amenaza")
+    print("\nUn momento! Parece que hay amenazas...")
+    enemigo = P.ubicActual.enem_pend.peek()
+    print(f"Aparecio {enemigo.nombre}. ")
+    print("------------------------------------------- ")
+    verDiscurso(P, enemigo)
+
+    print("------------------------------------")
+    print("Que deseas hacer?")
+    print(" huir | luchar")
+    opc = input("-->")
     if opc == "huir":
+      print(f"Has huido a la ubicacion {P.ubicActual.verUbicacionHuida()}")
       P.huir()
     elif opc == "luchar":
-      print("aun no hay codigo para luchar")
+      while True:
+        print("\nElige una accion:")
+        print(" atacar | pocion")
+        opc2 = input("-->")
 
-# Aqui se informa al jugador si existe algun personaje
+        if opc2 == "atacar":
+          print("Has hecho {puntos} puntos de daño")
+          break
+        elif opc2 == "pocion":
+          print("Has recuperado {puntos} puntos de salud")
+        else:
+          print("Opcion no valida")
+
+        print("Has vencido al enemigo")
+    else:
+      print("No has elegido una opcion correcta. Has huido!")
+      P.huir()
+
+# Aqui se informa al jugador si existe algun personaje benevolente
 # con quien haya que hablar primero para poder continuar
 
-  elif P.ubicActual.hayPersonajes():
+  elif P.ubicActual.hayBenevolentes():
     print("Hay un personaje en esta ubicacion que desa hablar contigo\n")
-    per = P.ubicActual.CpP.dequeue()
-    disc_per = per.discursos
-    disc_prot = P.discursos[per.id]
-    
-    while disc_per.actual is not None:
-      print(f"{per.nombre}: {disc_per.actual.dato}\n")
-      print(f"{P.nombre}: {disc_prot.actual.dato}")
-      disc_per.avanzar_ptr()
-      disc_prot.avanzar_ptr()
-
-    disc_per.reiniciar_ptr()
-    disc_prot.reiniciar_ptr()
+    print("-----------------------------------------------------------")
+    personaje = P.ubicActual.benev_pend.dequeue()
+    verDiscurso(P, personaje)
 
 
 # Si no hay nada pendiente, se ofrecen las siguientes opciones
 
   else:
+    arriba = P.ubicActual.conex[ARR]
+    abajo = P.ubicActual.conex[ABJ]
+    izquier = P.ubicActual.conex[IZQ]
+    derecha = P.ubicActual.conex[DER]
+
     print("Que deseas hacer?")
     print("inventario: Ver el inventario de objetos")
     print("stats     : Ver tus estadisticas")
-    print("mover     : Moverte de mapa")
-    #print("hablar    : Hablar con un personaje")  #########
-    print("salir     : Salir del juego")
+    print()
+    if arriba  is not None: print(f"arriba    : Moverte a {arriba.nombre}")
+    if abajo   is not None: print(f"abajo     : Moverte a {abajo.nombre}")
+    if izquier is not None: print(f"izquierda : Moverte a {izquier.nombre}")
+    if derecha is not None: print(f"derecha   : Moverte a {derecha.nombre}")
+    print()
+    print("salir     : Salir del juego\n")
     opc = input("--> ")
-
-    limpiarPantalla()
 
 # Mostrar el inventario del protagonista
 
@@ -235,43 +302,13 @@ while True:
 
 # Mover al protagonista de ubicacion
 
-    elif opc == "mover":
-      arriba = P.ubicActual.conex[ARR]
-      abajo = P.ubicActual.conex[ABJ]
-      izquier = P.ubicActual.conex[IZQ]
-      derecha = P.ubicActual.conex[DER]
-
-      print("    Hacia donde te deseas mover?")
-      if arriba is not None: print(f" - Arriba:    {arriba.nombre}")
-      if abajo is not None:  print(f" - Abajo:     {abajo.nombre}")
-      if izquier is not None: print(f" - Izquierda: {izquier.nombre}")
-      if derecha is not None: print(f" - Derecha:   {derecha.nombre}")
-      print("\nEscribe la direccion en letras minusculas:")
-      string = input("--> ")
-
-      direc = obtenerNumDireccion(string)
-      if direc == -1:
-        print("Direccion no valida")
-        continue
+    elif opc == "arriba" or opc == "abajo" or opc == "derecha" or opc == "izquierda":
+      direc = obtenerNumDireccion(opc)
       
       if P.ubicActual.conex[direc] is not None:
         P.mover(direc)
       else:
         print("No hay nada en esa direccion")
-
-# Hablar con alguno de los personajes benevolentes que aparecieron
-# al llegar a la ubicacion
-      """    elif opc == "hablar":
-      if P.ubicActual.Lp[0] is None and P.ubicActual.Lp[0] is None:
-        print("No hay nadie en esta ubicacion")
-      else:
-        print("Escribe el numero del personaje con quien deseas hablar:")
-        for i in range(0, 2):
-          if P.ubicActual.Lp[i] is not None:
-            print(f"{i+1}: {P.ubicActual.Lp[i].nombre}")
-      """
-
-
 
 # Salir del juego
 
