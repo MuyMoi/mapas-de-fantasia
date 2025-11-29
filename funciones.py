@@ -45,8 +45,15 @@ Presiona ENTER para iniciar la aventura''')
   input()
 
 def limpiarPantalla():
-  #system("clear")
-  pass
+  system("clear")
+
+def pedirnumero():
+    try:
+        n = int(input("-->"))
+    except:
+        print("Numero no valido")
+        return pedirnumero()  #volver a pedir
+    return n
 
 def verDiscurso(protagonista, personaje):
   discurso1 = personaje.discursos

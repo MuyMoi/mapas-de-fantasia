@@ -14,12 +14,12 @@ class Protagonista:
     self.nombre=nombre
     self.XP=0
     self.saludMax = 100
-    self.salud=100 
+    self.salud=100
     self.lugaresVisitados=0
     self.enemDerrotados=0
-    self.monedas=0
-    self.pociones=3
-    self.inventario = ListaObjetos()
+    self.monedas  = 0
+    self.pociones = 0
+    self.inventario = ListaObjetosClave()
     self.numObjetos = 2
     self.ubicActual = None
     self.discursos = [0] * 11
@@ -33,14 +33,15 @@ class Protagonista:
     print(f"Pociones: {self.pociones}")
     
     I = self.inventario
-    while I.actual != None:
-      print(f"- {aux.dato.nombre}")
-      I.avanzar_ptr()
-    I.reiniciar_ptr()
+    if not I.estaVacia():
+      while I.actual != None:
+        print(f"{I.actual.dato.nombre}")
+        I.avanzar_ptr()
+      I.reiniciar_ptr()
 
   def verEstadisticas(self):
     print(f"Puntos de Salud: {self.salud}")
-    print(f"XP: {self.XP}")
+    print(f"Puntaje: {self.XP} XP")
     print(f"Lugares visitados: {self.lugaresVisitados}")
     print(f"Enemigos derrotados: {self.enemDerrotados}")
     

@@ -11,5 +11,5 @@ class Enemigo:
     self.xp_recompensa = xp_recompensa
     self.monedas = monedas
     self.discursos = ListaEnlazadaSimple()
-    self.objetosRequeridos = ListaObjetos()
-    self.objetosRecompensa = ListaObjetos()
+    self.objetoRequerido  = None
+    self.objetoRecompensa = None

@@ -60,6 +60,9 @@ class ListaEnlazadaSimple:
     def reiniciar_ptr(self):
         self.actual = self.inicio
 
+    def estaVacia(self):
+        return self.inicio == None
+
     def imprimir(self):
         if self.inicio == None:
             print("Lista vacia")

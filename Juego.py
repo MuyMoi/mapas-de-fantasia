@@ -73,6 +73,13 @@ ruta6.agregarconex(IZQ, bosque)
 ruta6.agregarconex(ABJ, ruta5)
 ruta5.agregarconex(ABJ, campamento)
 
+# Objetos clave
+amuleto = ObjetoClave("Amuleto del Agua")
+daga = ObjetoClave("Daga oxidada")
+llaveEncierro = ObjetoClave("Llave del Encierro Eterno")
+llaveAntigua = ObjetoClave("Llave antigua")
+corona = ObjetoClave("Corona del Ocaso")
+colmillo = ObjetoClave("Colmillo mágico")
 
 # Añadir personajes
 
@@ -80,24 +87,32 @@ sabio = Benevolente("Sabio Anciano", 0)
 aldea.benev_pend.enqueue(sabio)
 
 espiritu = Enemigo("Espiritu del lago", 1, 100, 10, 50, 10)
+espiritu.objetoRecompensa = amuleto
 lago.enem_pend.enqueue(espiritu)
 
 saqueador = Enemigo("Saqueador del sendero", 2, 110, 15, 70, 30)
+saqueador.objetoRecompensa = daga
+saqueador.objetoRequerido = amuleto
 ruta2.enem_pend.enqueue(saqueador)
 
 exploradora = Benevolente("Exploradora Errante", 3)
 campamento.benev_pend.enqueue(exploradora)
 
 vigiasombras = Enemigo("Vigia de las Sombras", 4, 150, 20, 90, 15)
+vigiasombras.objetoRecompensa = llaveAntigua
+vigiasombras.objetoRequerido = llaveEncierro
 ruta5.enem_pend.enqueue(vigiasombras)
 
 curandera = Benevolente("Curandera del Camino", 5)
 ruta3.benev_pend.enqueue(curandera)
 
 carcelero = Enemigo("Carcelero de las Profundidades", 6, 100, 15, 80, 10)
+carcelero.objetoRecompensa = llaveEncierro
 mazmorra.enem_pend.enqueue(carcelero)
 
 rey = Enemigo("Rey del Ocaso", 7, 120, 18, 85, 50)
+rey.objetoRecompensa = corona
+rey.objetoRequerido = llaveAntigua
 castillo.enem_pend.enqueue(rey)
 
 guardian = Benevolente("Guardian Liberado", 8)
@@ -107,10 +122,9 @@ vigiahoriz = Benevolente("Vigia del Horizonte", 9)
 ruta6.benev_pend.enqueue(vigiahoriz)
 
 lobo = Enemigo("Lobo Sombrio", 10, 200, 20, 150, 20)
+lobo.objetoRecompensa = colmillo
+lobo.objetoRequerido = corona
 bosque.enem_pend.enqueue(lobo)
-
-#= Benevolente("", 11)
-#bosque.benev_pend.enqueue()
 
 
 # Introduccion
@@ -161,7 +175,7 @@ input()
 
 P = Protagonista(nombre)
 P.ubicActual = aldea
-
+P.pociones = 3
 
 # Añadir discursos
 
@@ -274,7 +288,7 @@ cruzarte para hacerlo, que así sea. Tu vigilia termina hoy.
 # CURANDERA (5)
 
 curandera.discursos.insertarFinal(
-'''No temas, viajero, mis hierbas no muerden. Pocos se detienen en esta
+'''No temas, viajero. Pocos se detienen en esta
 ruta sin estar heridos… por fuera o por dentro. Ruta 3 es un lugar
 extraño: parece tranquila, pero escucha todo lo que pasa en el mapa.
 El viento trae susurros del Bosque Encantado y, en noches claras,
@@ -285,10 +299,18 @@ has tomado.
 ''')
 
 P.discursos[5].insertarFinal(
-'''Gracias por tus palabras y por tu ayuda. No imaginaba encontrar calma
-en medio del camino. Seguiré adelante con más cuidado… y con más fe.
-Quizás no pueda salvarlo todo, pero haré lo posible por no perderme a
-mí mismo
+'''No imaginaba encontrar calma en medio del camino. 
+Seguiré adelante con más cuidado… y con más fe. Quizás no pueda 
+salvarlo todo, pero haré lo posible por no perderme a mí mismo.
+''')
+
+curandera.discursos.insertarFinal(
+'''Aquí me quedare para cuando necesites comprar pociones. 
+Que tengas buena suerte, viajero.
+''')
+
+P.discursos[5].insertarFinal(
+'''Gracias por tus palabras y por tu ayuda.
 ''')
 
 # CARCELERO (6)
@@ -406,12 +428,20 @@ while True:
 # se informa y se dan opciones
 
   if P.ubicActual.hayEnemigos():
-    print("\nUn momento! Parece que hay amenazas...")
     enem = P.ubicActual.enem_pend.peek()
+    obj = enem.objetoRequerido
+    if obj is not None:
+      if P.inventario.buscar(obj.nombre) == None:
+        print(f"Necesitas el objeto '{enem.objetoRequerido.nombre}' para enfrentarte a este enemigo.")
+        print(f"Parece que tendras que regresar y buscarlo en otra parte.")
+        P.huir()
+        input("\nPresiona ENTER para continuar...")
+        continue
+
+    print("Un momento! Parece que hay amenazas...\n")
     print(f"Aparecio {enem.nombre}. ")
     print("------------------------------------------- ")
     verDiscurso(P, enem)
-
     print("------------------------------------")
     print("Que deseas hacer?")
     print(" huir | luchar")
@@ -423,16 +453,14 @@ while True:
       else:
         print("Opcion no valida. Elige 'huir' o 'luchar'")
 
-    print("\n\n\n\n")
-
     if opc == "huir":
-      print(f"Has huido a la ubicacion {P.ubicActual.verUbicacionHuida()}")
+      print(f"Has huido a {P.ubicActual.verUbicacionHuida()}")
       P.huir()
+      input("\nPresiona ENTER para continuar...")
     elif opc == "luchar":
       while True:
         #Combate por turnos simple
-        print("\nTu salud:", P.salud)
-        print(f"Salud de {enem.nombre}:", enem.salud)
+        print(f"\nTu salud: {P.salud}  |  Salud de {enem.nombre}: {enem.salud}")
         print("\nElige una accion:")
         print(" atacar | pocion")
         opc2 = input("-->")
@@ -447,7 +475,10 @@ while True:
             P.XP += enem.xp_recompensa
             P.monedas += enem.monedas
             P.enemDerrotados += 1
+            P.inventario.agregar(enem.objetoRecompensa)
             print(f"Has ganado {enem.xp_recompensa} XP y {enem.monedas} monedas.")
+            print(f"Has obtenido el objeto clave: {enem.objetoRecompensa.nombre}")
+            input("\nPresiona ENTER para continuar...")
             break
 
         elif opc2 == "pocion":
@@ -478,6 +509,7 @@ while True:
           P.huir()
           P.salud = P.saludMax
           enem.salud = enem.saludMax
+          input("\nPresiona ENTER para continuar...")
           break
 
 # Aqui se informa al jugador si existe algun personaje benevolente
@@ -488,42 +520,48 @@ while True:
     print("-----------------------------------------------------------")
     personaje = P.ubicActual.benev_pend.dequeue()
     verDiscurso(P, personaje)
-
+    input("\nPresiona ENTER para continuar...")
 
 # Si no hay nada pendiente, se ofrecen las siguientes opciones
 
   else:
 
-    print(f"Puntos de salud: {P.salud} de {P.saludMax}")
+    if P.ubicActual.visitado == False:
+      P.lugaresVisitados += 1
+      P.ubicActual.visitado = True
+
+    print(f"Puntos de salud: {P.salud} de {P.saludMax}\n")
     arriba = P.ubicActual.conex[ARR]
     abajo = P.ubicActual.conex[ABJ]
     izquier = P.ubicActual.conex[IZQ]
     derecha = P.ubicActual.conex[DER]
 
-    print("Que deseas hacer?")
-    print("inventario: Ver el inventario de objetos")
-    print("stats     : Ver tus estadisticas")
+    print("         Que deseas hacer?\n")
+    print("stats     : Ver tus estadisticas y objetos")
     print("pocion    : Usar una pocion para recuperar salud")
     print()
     if arriba  is not None: print(f"arriba    : Moverte a {arriba.nombre}")
     if abajo   is not None: print(f"abajo     : Moverte a {abajo.nombre}")
     if izquier is not None: print(f"izquierda : Moverte a {izquier.nombre}")
     if derecha is not None: print(f"derecha   : Moverte a {derecha.nombre}")
+
+    if P.ubicActual.nombre == "Ruta 3":
+      print("\ncomprar   : Comprar pociones a la curandera")
+
     print()
     print("salir     : Salir del juego\n")
     opc = input("--> ")
-
-# Mostrar el inventario del protagonista
-
-    if opc == "inventario":
-      print("    INVENTARIO")
-      P.verInventario()
+    print()
 
 # Mostrar las estadisticas
 
-    elif opc == "stats":
+    if opc == "stats":
       print(f"    ESTADISTICAS DE {P.nombre}")
       P.verEstadisticas()
+      print("\n    INVENTARIO")
+      P.verInventario()
+      input("\nPresiona ENTER para continuar...")
+
 
 # Usar una pocion para recuperar salud
 
@@ -542,6 +580,46 @@ while True:
         print(f"Te quedan {P.pociones} pociones.")
 
       print(f"Tu salud actual es {P.salud}.")
+      input("\nPresiona ENTER para continuar...")
+
+# Comprar pociones a la curandera
+
+    elif opc == "comprar":
+      if P.ubicActual.nombre == "Ruta 3":
+        costo = 3
+        print(f"La curandera ofrece pociones por {costo} monedas cada una.")
+        print(f"Tienes {P.monedas} monedas.")
+
+        if P.monedas < costo:
+          print("\nNo tienes suficientes monedas para comprar pociones.")
+          input("\nPresiona ENTER para continuar...")
+          continue
+        
+        while True:
+          print("\nCuantas pociones deseas comprar?")
+          cantidad = pedirnumero()
+          if cantidad < 0:
+            print("Ingresa un numero valido.")
+            continue
+          costototal = cantidad * costo
+          if costototal > P.monedas:
+            print("No tienes suficientes monedas para esa cantidad.")
+            continue
+          break
+        
+        P.monedas -= costototal
+        P.pociones += cantidad
+        if cantidad == 0:
+          print("No has comprado ninguna pocion.")
+        else:
+          print(f"Has comprado {cantidad} pociones por {costototal} monedas.")
+          print(f"Ahora tienes {P.pociones} pociones y {P.monedas} monedas restantes.")
+        input("\nPresiona ENTER para continuar...")
+
+      else:
+        print("No hay nadie aqui para comprar pociones.")
+      
+      input("\nPresiona ENTER para continuar...")
 
 # Mover al protagonista de ubicacion
 
@@ -552,6 +630,7 @@ while True:
         P.mover(direc)
       else:
         print("No hay nada en esa direccion")
+        input("\nPresiona ENTER para continuar...")
 
 # Salir del juego
 
@@ -563,6 +642,4 @@ while True:
 # Opcion no valida
     else:
       print("Opcion no valida. Asegurate de escribir los comandos en minuscula")
-
-  print("\nPresiona ENTER para continuar")
-  input()
+      input("\nPresiona ENTER para continuar...")

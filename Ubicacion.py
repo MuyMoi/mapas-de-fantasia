@@ -31,6 +31,7 @@ class Ubicacion:
     self.benev_pend = Cola()  # Cola Benevolentes Pendientes
     self.enem_pend = Cola()   # Cola enemigos Pendientes
     self.direcHuida = direccionHuida
+    self.visitado = False
 
 # comprobar si hay enemigos por vencer en la ubicacion actual
 
