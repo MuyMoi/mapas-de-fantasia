@@ -1,14 +1,14 @@
 from os import system
 
-# funcion utilitaria para obtener el numero correspondiente
-# a una direccion (0,1,2,3) a partir de un string. Si no es
-# valido, retorna -1
 
 IZQ = 0
 DER = 1
 ARR = 2
 ABJ = 3
 
+# funcion utilitaria para obtener el numero correspondiente
+# a una direccion (0,1,2,3) a partir de un string. Si no es
+# valido, retorna -1
 def obtenerNumDireccion(string):
   if string == "arriba":    return ARR
   if string == "abajo":     return ABJ
@@ -49,12 +49,15 @@ Buena suerte, viajero!
 ''')
   input("Presiona ENTER para iniciar la aventura...")
 
+# Limpiar la pantalla de la terminal
 def limpiarPantalla():
   system("clear")
 
+# Ver si un objeto clave ya fue conseguido
 def objetoConseguido(objeto, listaobjetos):
   return listaobjetos.buscar(objeto.nombre) != None
 
+# Pedir un numero al usuario, con manejo de errores
 def pedirnumero():
     try:
         n = int(input("-->"))
@@ -63,6 +66,7 @@ def pedirnumero():
         return pedirnumero()  #volver a pedir
     return n
 
+# Ver el dialogo entre el protagonista y un personaje
 def verDialogo(protagonista, personaje):
   discurso1 = personaje.discursos
   discurso2 = protagonista.discursos[personaje.id]
@@ -76,6 +80,7 @@ def verDialogo(protagonista, personaje):
   discurso1.reiniciar_ptr()
   discurso2.reiniciar_ptr()
 
+# Ver el mensaje final al completar la aventura
 def verMensajeFinal(prota):
   print(f'''    Felicitaciones, {prota.nombre}!
 Has sabido mantener la calma en situaciones que muchos otros no
@@ -90,3 +95,27 @@ Eres un heroe!
   prota.verEstadisticas()
   print("\n    OBJETOS RECOLECTADOS:")
   prota.verInventario()
+
+# Ver si una ubicacion es transitable con el inventario actual
+def esTransitable(ubicacion, inventario):
+    if ubicacion is None:
+        return False
+
+    obj = ubicacion.objetoRequerido
+    if obj is None:
+        return True
+    return objetoConseguido(obj, inventario)
+
+# buscar el mapa al cual ir para continuar la aventura
+def buscarUbicacionMision(actual, visitados, inventario):
+    visitados.insertarFinal(actual)
+
+    if actual.hayEnemigos():
+        return actual
+
+    for i in range(4):
+        vecino = actual.conex[i]
+        if vecino != None and visitados.buscar(vecino) == None:
+            if esTransitable(vecino, inventario):
+                return buscarUbicacionMision(vecino, visitados, inventario)
+    return None

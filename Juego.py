@@ -429,6 +429,7 @@ final de tu tormento.
 P.ubicActual = aldea
 P.pociones = 3
 poderpocion = 40   # puntos de vida que recupera una pocion
+completado = False
 
 while True:
 # Se limpia la pantalla y se muestra la ubicacion actual
@@ -533,6 +534,7 @@ while True:
             if P.ubicActual == bosque:
               limpiarPantalla()
               verMensajeFinal(P)
+              completado = True
               input("\nPresiona ENTER para continuar...")
             break
 
@@ -609,7 +611,8 @@ while True:
     # solo en la ruta 3 se puede comprar
     if P.ubicActual == ruta3: print("\ncomprar   : Comprar pociones a la curandera")
 
-    print("\nsalir     : Salir del juego\n")
+    print("\nayuda     : Por si no sabes que hacer")
+    print("salir     : Salir del juego\n")
     opc = input("--> ")
     print()
 
@@ -690,6 +693,19 @@ while True:
       else:
         print("No hay nada en esa direccion")
         input("\nPresiona ENTER para continuar...")
+
+# Pedir ayuda sobre la mision actual
+    elif opc == "ayuda":
+      if completado:
+        print("Has completado el juego! Felicidades!")
+        print("Puedes seguir explorando el mapa si lo deseas.")
+      else:
+        v = ListaEnlazadaSimple()
+        ub = buscarUbicacionMision(P.ubicActual, v, P.inventario)
+        print(f"Tu siguiente objetivo es llegar a: {ub.nombre}")
+      
+      input("\nPresiona ENTER para continuar...")
+
 
 # Salir del juego
 

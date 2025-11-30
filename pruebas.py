@@ -107,8 +107,8 @@ campamento.benev_pend.enqueue(exploradora)
 
 vigiasombras = Enemigo("Vigia de las Sombras", 4, 150, 20, 90, 5)
 vigiasombras.objetoRecompensa = llaveAntigua
-ruta5.objetoRequerido = llaveEncierro
-ruta5.enem_pend.enqueue(vigiasombras)
+#ruta5.objetoRequerido = llaveEncierro
+#ruta5.enem_pend.enqueue(vigiasombras)
 
 curandera = Benevolente("Curandera del Camino", 5)
 ruta3.benev_pend.enqueue(curandera)
@@ -116,11 +116,11 @@ ruta3.benev_pend.enqueue(curandera)
 carcelero = Enemigo("Carcelero de las Profundidades", 6, 200, 15, 80, 0)
 carcelero.objetoRecompensa = llaveEncierro
 mazmorra.objetoRequerido = corona
-mazmorra.enem_pend.enqueue(carcelero)
+#mazmorra.enem_pend.enqueue(carcelero)
 
 rey = Enemigo("Rey del Ocaso", 7, 120, 18, 85, 40)
 rey.objetoRecompensa = corona
-castillo.enem_pend.enqueue(rey)
+#castillo.enem_pend.enqueue(rey)
 
 guardian = Benevolente("Guardian Liberado", 8)
 castillo.benev_pend.enqueue(guardian)
@@ -130,7 +130,7 @@ ruta6.benev_pend.enqueue(vigiahoriz)
 
 lobo = Enemigo("Lobo Sombrio", 10, 200, 20, 150, 5)
 lobo.objetoRecompensa = colmillo
-bosque.objetoRequerido = llaveAntigua
+#bosque.objetoRequerido = llaveAntigua
 bosque.enem_pend.enqueue(lobo)
 
 
@@ -147,6 +147,7 @@ def esTransitable(ubicacion, inventario):
         return True
     return objetoConseguido(obj, inventario)
 
+'''
 def bfsHastaEnemigo(origen, inventario):
     cola = Cola()
     cola.enqueue(origen)
@@ -196,3 +197,24 @@ P.ubicActual = aldea
 
 ruta = bfsHastaEnemigo(P.ubicActual, P.inventario)
 mostrarRuta(ruta)
+'''
+
+# buscar el mapa al cual ir para continuar la aventura
+def buscarUbicacionMision(actual, visitados):
+    visitados.insertarFinal(actual)
+
+    if actual.hayEnemigos():
+        return actual
+
+    for i in range(4):
+        vecino = actual.conex[i]
+        if vecino != None and visitados.buscar(vecino) == None:
+            if esTransitable(vecino, P.inventario):
+                return buscarUbicacionMision(vecino, visitados)
+    
+    return None
+
+print("DFS Recursivo:")
+v = ListaEnlazadaSimple()
+ub = buscarUbicacionMision(aldea, v)
+print(ub.nombre if ub != None else "No se encontró ningún enemigo.")
