@@ -63,7 +63,7 @@ def pedirnumero():
         return pedirnumero()  #volver a pedir
     return n
 
-def verDiscurso(protagonista, personaje):
+def verDialogo(protagonista, personaje):
   discurso1 = personaje.discursos
   discurso2 = protagonista.discursos[personaje.id]
 

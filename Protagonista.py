@@ -1,7 +1,7 @@
-from Objeto import *
+from ObjetoClave import *
 from Ubicacion import *
 from listaenlazadasimple import *
-from ListaObjetos import *
+from ListaObjetosClave import *
 
 ''' Representa al protagonista y contiene el nombre
 personalizado, los puntos de experiencia (XP)
@@ -20,7 +20,6 @@ class Protagonista:
     self.monedas  = 0
     self.pociones = 0
     self.inventario = ListaObjetosClave()
-    self.numObjetos = 2
     self.ubicActual = None
     self.discursos = [0] * 11
     self.atk = 20

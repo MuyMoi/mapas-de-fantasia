@@ -1,5 +1,5 @@
 from listaenlazadasimple import *
-from ListaObjetos import *
+from ListaObjetosClave import *
 
 class Enemigo:
   def __init__(self, nombre, _id, saludMax, atk, xp_recompensa, monedas):
@@ -11,5 +11,4 @@ class Enemigo:
     self.xp_recompensa = xp_recompensa
     self.monedas = monedas
     self.discursos = ListaEnlazadaSimple()
-    self.objetoRequerido  = None
     self.objetoRecompensa = None

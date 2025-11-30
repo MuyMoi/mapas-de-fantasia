@@ -138,11 +138,11 @@ colmillo = ObjetoClave("Colmillo mágico")
 sabio = Benevolente("Sabio Anciano", 0)
 aldea.benev_pend.enqueue(sabio)
 
-espiritu = Enemigo("Espiritu del lago", 1, 100, 10, 50, 4)
+espiritu = Enemigo("Espiritu del lago", 1, 100, 10, 50, 5)
 espiritu.objetoRecompensa = amuleto
 lago.enem_pend.enqueue(espiritu)
 
-saqueador = Enemigo("Saqueador del sendero", 2, 110, 15, 70, 10)
+saqueador = Enemigo("Saqueador del sendero", 2, 110, 15, 70, 15)
 saqueador.objetoRecompensa = daga
 ruta2.objetoRequerido = amuleto
 ruta2.enem_pend.enqueue(saqueador)
@@ -158,12 +158,12 @@ ruta5.enem_pend.enqueue(vigiasombras)
 curandera = Benevolente("Curandera del Camino", 5)
 ruta3.benev_pend.enqueue(curandera)
 
-carcelero = Enemigo("Carcelero de las Profundidades", 6, 200, 15, 80, 0)
+carcelero = Enemigo("Carcelero de las Profundidades", 6, 200, 15, 80, 5)
 carcelero.objetoRecompensa = llaveEncierro
 mazmorra.objetoRequerido = corona
 mazmorra.enem_pend.enqueue(carcelero)
 
-rey = Enemigo("Rey del Ocaso", 7, 120, 18, 85, 40)
+rey = Enemigo("Rey del Ocaso", 7, 120, 18, 85, 20)
 rey.objetoRecompensa = corona
 castillo.enem_pend.enqueue(rey)
 
@@ -428,6 +428,7 @@ final de tu tormento.
 
 P.ubicActual = aldea
 P.pociones = 3
+poderpocion = 40   # puntos de vida que recupera una pocion
 
 while True:
 # Se limpia la pantalla y se muestra la ubicacion actual
@@ -456,13 +457,13 @@ while True:
     print("Un momento! Parece que hay amenazas...\n")
     print(f"Aparecio {enem.nombre}. ")
     print("------------------------------------------- ")
-    verDiscurso(P, enem)
+    verDialogo(P, enem)
     print("------------------------------------")
     
     # solo en la mazmorra: se pueden pagar 50 monedas para
     # evitar pelear y seguir con la aventura
     if P.ubicActual == mazmorra:
-      monedas = 50
+      monedas = 10
       print(f"Deseas pagar {monedas} para evitar pelear con el carcelero?")
       print(f"Tiene {enem.saludMax} de salud")
       opc = ""
@@ -477,7 +478,6 @@ while True:
         if P.monedas >= monedas:  # si se tienen las monedas suficientes
           P.ubicActual.enem_pend.dequeue()  # se borra al enemigo de la cola
           P.XP += enem.xp_recompensa
-          P.monedas -= monedas
           P.enemDerrotados += 1
           P.inventario.agregar(enem.objetoRecompensa) # se agrega el obj recompensa
           print(f"\nHas ganado {enem.xp_recompensa} XP")
@@ -544,11 +544,11 @@ while True:
             print("Tu salud ya esta al maximo!")
             continue
 
-          P.salud += 30   # sumar 30 puntos de salud
+          P.salud += poderpocion   # sumar puntos de salud
           P.pociones -= 1 # reducir el numero de pociones
           if P.salud > P.saludMax:
             P.salud = P.saludMax  # limitar la salud maxima
-          print("Has usado una pocion y recuperado 30 puntos de salud.")
+          print(f"Has usado una pocion y recuperado {poderpocion} puntos de salud.")
           print(f"Te quedan {P.pociones} pociones.")
 
         else:
@@ -577,7 +577,7 @@ while True:
     print("Hay un personaje en esta ubicacion que desa hablar contigo\n")
     print("-----------------------------------------------------------")
     personaje = P.ubicActual.benev_pend.dequeue()
-    verDiscurso(P, personaje)
+    verDialogo(P, personaje)
     input("\nPresiona ENTER para continuar...")
 
 # Si no hay nada pendiente, se ofrecen las siguientes opciones
@@ -632,11 +632,11 @@ while True:
         print("Tu salud ya esta al maximo!")
         print("No has gastado la pocion.")
       else:
-        P.salud += 30    # sumar 30 puntos de salud
+        P.salud += poderpocion    # sumar puntos de salud
         P.pociones -= 1
         if P.salud > 100:
           P.salud = 100
-        print("Has usado una pocion y recuperado 30 puntos de salud.")
+        print(f"Has usado una pocion y recuperado {poderpocion} puntos de salud.")
         print(f"Te quedan {P.pociones} pociones.")
 
       print(f"Tu salud actual es {P.salud}.")
