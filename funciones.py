@@ -19,33 +19,41 @@ def obtenerNumDireccion(string):
 # Ver la ayuda del juego
 def verAyuda():
   print('''
-Este juego consiste en moverte por distintos mapas
-y enfrentar diversos enemigos, a los cuales deberás
-vencer para poder continuar la exploración. Como los
-venceras? Deberas analizar a cada uno y determinar
-la mejor estrategia. Si te derrota, deberas regresar
-a una ubicacion anterior para recargar energias.
+Este juego consiste en moverte por distintas ubicaciones
+y explorarlos todos, enfrentando cualquier amenaza que
+te impida seguir con comodidad.
 
-El mapa consta de 6 ubicaciones mas 6 rutas. En cada
-ubicacion podras encontrar objetos, como pociones,
-monedas y otros objetos que te seran de utilidad para
-enfrentar a los enemigos. Tambien podras encontrar
-personajes benevolentes que te daran consejos o hasta
-objetos.
+Tendras un menu principal con opciones para ver tus stats,
+objetos, usar pociones, moverte de mapa, comprar pociones
+(solo disponibles en una ubicacion) y salir del juego.
+Es posible que al llegar a un lugar aparezca un personaje
+benevolente con algo que decirte, o bien un enemigo con
+ganas de luchar.
 
-Cada vez que logres avanzar, obtendras puntos de
-experiencia.
+Si te aparece un enemigo, deberas vencerlo en un combate
+simple para poder continuar la exploración. Si los vences,
+te daran recompensas en forma de monedas, puntos XP y
+objetos clave que necesitaras para poder continuar.
+Si te derrota, seras regresado a una ubicacion anterior.
+Si no tienes un objeto necesario para seguir por una
+ubicacion, deberas buscarlo en otro lado.
 
-Finalizaras la aventura cuando derrotes al jefe final,
-al cual deberas encontrar.
+Puedes usar pociones para recuperar 30 puntos de salud, pero
+no podrás tener más de 100 puntos de salud, así que usalas
+sabiamente.
 
-Buena suerte!
+Finalizaras la aventura cuando explores todos los mapas y
+derrotes al último enemigo.
 
-Presiona ENTER para iniciar la aventura''')
-  input()
+Buena suerte, viajero!
+''')
+  input("Presiona ENTER para iniciar la aventura...")
 
 def limpiarPantalla():
   system("clear")
+
+def objetoConseguido(objeto, listaobjetos):
+  return listaobjetos.buscar(objeto.nombre) != None
 
 def pedirnumero():
     try:
@@ -67,3 +75,18 @@ def verDiscurso(protagonista, personaje):
 
   discurso1.reiniciar_ptr()
   discurso2.reiniciar_ptr()
+
+def verMensajeFinal(prota):
+  print(f'''    Felicitaciones, {prota.nombre}!
+Has sabido mantener la calma en situaciones que muchos otros no
+fueron capaces de soportar. Has liberado este mapa de todas las
+amenazas, maleantes y espíritus que la arrinconaban y mantenian
+en vilo a los pocos habitantes. Ahora se respira paz y alegría.
+
+Eres un heroe!
+
+    TUS ESTADISTICAS FINALES:
+''')
+  prota.verEstadisticas()
+  print("\n    OBJETOS RECOLECTADOS:")
+  prota.verInventario()
