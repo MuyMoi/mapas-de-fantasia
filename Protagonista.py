@@ -22,7 +22,7 @@ class Protagonista:
     self.inventario = ListaObjetosClave()
     self.ubicActual = None
     self.discursos = [0] * 11
-    self.atk = 20
+    self.atk = 40
     
     for i in range(0, 11):
       self.discursos[i] = ListaEnlazadaSimple()

@@ -51,7 +51,7 @@ Buena suerte, viajero!
 
 # Limpiar la pantalla de la terminal
 def limpiarPantalla():
-  system("clear")
+  system("cls")
 
 # Ver si un objeto clave ya fue conseguido
 def objetoConseguido(objeto, listaobjetos):
@@ -59,12 +59,12 @@ def objetoConseguido(objeto, listaobjetos):
 
 # Pedir un numero al usuario, con manejo de errores
 def pedirnumero():
-    try:
-        n = int(input("-->"))
-    except:
-        print("Numero no valido")
-        return pedirnumero()  #volver a pedir
-    return n
+  try:
+    n = int(input("-->"))
+  except:
+    print("Numero no valido")
+    return pedirnumero()  #volver a pedir
+  return n
 
 # Ver el dialogo entre el protagonista y un personaje
 def verDialogo(protagonista, personaje):
@@ -98,24 +98,26 @@ Eres un heroe!
 
 # Ver si una ubicacion es transitable con el inventario actual
 def esTransitable(ubicacion, inventario):
-    if ubicacion is None:
-        return False
+  if ubicacion is None:
+    return False
 
-    obj = ubicacion.objetoRequerido
-    if obj is None:
-        return True
-    return objetoConseguido(obj, inventario)
+  obj = ubicacion.objetoRequerido
+  if obj is None:
+    return True
+  return objetoConseguido(obj, inventario)
 
 # buscar el mapa al cual ir para continuar la aventura
 def buscarUbicacionMision(actual, visitados, inventario):
-    visitados.insertarFinal(actual)
+  visitados.insertarFinal(actual)
 
-    if actual.hayEnemigos():
-        return actual
+  if actual.hayEnemigos():
+    return actual
 
-    for i in range(4):
-        vecino = actual.conex[i]
-        if vecino != None and visitados.buscar(vecino) == None:
-            if esTransitable(vecino, inventario):
-                return buscarUbicacionMision(vecino, visitados, inventario)
-    return None
+  for i in range(4):
+    vecino = actual.conex[i]
+    if vecino != None and visitados.buscar(vecino) == None:
+      if esTransitable(vecino, inventario):
+        busc = buscarUbicacionMision(vecino, visitados, inventario)
+        if busc != None:
+          return busc
+  return None

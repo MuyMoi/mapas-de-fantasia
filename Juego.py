@@ -335,7 +335,7 @@ pagaré.
 
 carcelero.discursos.insertarFinal(
 '''Esta bien, joven. Ya que dijiste que pagarás, podemos terminar 
-esto por las buenas o por las malas. Si me das 50 monedas, con gusto 
+esto por las buenas o por las malas. Si me das algunas monedas, con gusto 
 me iré de este lugar. O sino, sufriras el poder de mi espada.
 ''')
 
@@ -702,7 +702,8 @@ while True:
       else:
         v = ListaEnlazadaSimple()
         ub = buscarUbicacionMision(P.ubicActual, v, P.inventario)
-        print(f"Tu siguiente objetivo es llegar a: {ub.nombre}")
+        if ub is not None:
+          print(f"Tu siguiente objetivo es llegar a: {ub.nombre}")
       
       input("\nPresiona ENTER para continuar...")
 
