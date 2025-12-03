@@ -1,5 +1,7 @@
 from funciones import *
 from Protagonista import *
+from ArbolInverso import *
+from pila import *
 
 P = Protagonista("juan")
 
@@ -11,30 +13,30 @@ P = Protagonista("juan")
 
 # Crear los lugares que componen el mapa
 
-aldea = Ubicacion("Aldea principal",
+aldea = Ubicacion("Aldea principal", "aldea", 
   "Un pequeño poblado rodeado de colinas y bosques. Ultimo " +
   "refugio de calma antes de adentrarse en un mundo corrompido")
 
-lago = Ubicacion("Lago sagrado",
+lago = Ubicacion("Lago sagrado", "lago", 
   "Antigua fuente sagrada cuyas aguas ahora reflejan una " +
   "corrupción silenciosa y profunda.",
   direccionHuida=IZQ)
 
-campamento = Ubicacion("Campamento", 
+campamento = Ubicacion("Campamento", "campamen",
   "Puesto de descanso para viajeros, donde confluyen " +
   "advertencias, rumores y las últimas hogueras seguras del mapa")
 
-mazmorra = Ubicacion("Mazmorra",
+mazmorra = Ubicacion("Mazmorra", "mazmorra",
   "Prisión subterránea de piedra y lamentos, construida para " +
   "encerrar horrores que nunca debieron liberarse",
   direccionHuida=ARR)
 
-castillo = Ubicacion("Castillo antiguo",
+castillo = Ubicacion("Castillo antiguo", "castillo",
   "Fortaleza en ruinas atrapada en el tiempo, gobernada por " +
   "ecos de un reino que se niega a desaparecer",
   direccionHuida=ABJ)
 
-bosque = Ubicacion("Bosque encantado",
+bosque = Ubicacion("Bosque encantado", "bosque",
   "El aire es frío y oyes ruidos entre los árboles. Cada árbol " +
   "parece observar al viajero",
   direccionHuida=DER)
@@ -42,24 +44,24 @@ bosque = Ubicacion("Bosque encantado",
 
 # Crear las rutas que conectan los lugares
 
-ruta1 = Ubicacion("Ruta 1",
+ruta1 = Ubicacion("Ruta 1", "ruta1",
   "Camino inicial entre praderas suaves, donde el peligro aún " +
   "parece lejano y la aventura apenas despierta")
-ruta2 = Ubicacion("Ruta 2",
+ruta2 = Ubicacion("Ruta 2", "ruta2"
   "Sendero rocoso dominado por bandidos, primer filtro entre " +
   "la inocencia de la aldea y la crudeza del viaje",
   direccionHuida=IZQ)
-ruta3 = Ubicacion("Ruta 3",
+ruta3 = Ubicacion("Ruta 3", "ruta3",
   "Camino tranquilo en apariencia, donde el viento transporta " +
   "ecos de todo lo que ocurre en las regiones cercanas")
-ruta4 = Ubicacion("Ruta 4",
+ruta4 = Ubicacion("Ruta 4", "ruta4",
   "Sendero estrecho entre rocas y niebla, paso olvidado que " +
   "conecta regiones sin la protección de rutas seguras")
-ruta5 = Ubicacion("Ruta 5",
+ruta5 = Ubicacion("Ruta 5", "ruta5",
   "Paso oscuro vigilado por sombras antiguas, conexión directa " +
   "entre las ruinas del castillo y las tierras olvidadas",
   direccionHuida=ABJ)
-ruta6 = Ubicacion("Ruta 6",
+ruta6 = Ubicacion("Ruta 6", "ruta6",
   "Ruta elevada y solitaria, donde el horizonte anuncia un punto " +
   "de no retorno para el viajero")
 
@@ -145,58 +147,85 @@ def esTransitable(ubicacion, inventario):
     obj = ubicacion.objetoRequerido
     if obj is None:
         return True
-    return objetoConseguido(obj, inventario)
+    return objetoEnInventario(obj, inventario)
 
-'''
-def bfsHastaEnemigo(origen, inventario):
-    cola = Cola()
-    cola.enqueue(origen)
 
-    padres = {}
-    visitados = ListaEnlazadaSimple()
+# Esta funcion busca la ubicación mas proxima al protagonista en la
+# cual hay enemigos que puede enfrentar. Tiene en cuenta la restriccion
+# de que no puede pasar por algunos mapas por no tener algun objeto
+# en su inventario, y evita repetir nodos añadiendolos a una lista de
+# visitados.
+# Para permitir reconstruir la ruta,se utiliza un "arbol inverso", en 
+# el cual se considera que el nodo de partida es el padre, y los
+# nodos vecinos a este son sus hijos. Sin embargo, solo se almacena
+# una referencia al nodo padre, no al nodo hijo. Esto permitirá
+# devolverse para reconstruir la ruta mas cercana, ya que el nodo final
+# es el nodo hijo.
 
+def busquedaBFS(origen, inventario):
+    cola = Cola()              # cola de nodos pendientes por visitar
+    visitados = ListaEnlazadaSimple()  # lista de nodos visitados
+    nodo_inverso_padre = ArbolInverso(origen, None)  # Dato: ubicacion origen, Padre: None
     visitados.insertarFinal(origen)
 
-    while not cola.isEmpty():
+    # en la cola no voy a meter directamente el nodo origen, sino
+    # que lo voy a "encapsular" en la clase nodo inverso, para
+    # no perder la referencia a cada nodo padre.
+    cola.enqueue(nodo_inverso_padre)
+
+    while not cola.isEmpty():   # mientras no quede nada por visitar
         actual = cola.dequeue()
 
-        # Si aquí hay enemigos, reconstruimos la ruta
-        if actual.hayEnemigos():
-            return reconstruirRuta(padres, origen, actual)
+        # Si aquí hay enemigos, terminamos la busqueda
+        if actual.nodo.hayEnemigos():
+            return actual
 
+        # examino las direcciones
         for i in range(0,4):
-            vecino = actual.conex[i]
-            if (vecino is not None) and (visitados.buscar(vecino) is not None):
+            vecino = actual.nodo.conex[i]
+            if (vecino is not None) and (visitados.buscar(vecino) is None):
                 if esTransitable(vecino, inventario):
-                    print(vecino.nombre)
                     visitados.insertarFinal(vecino)
-                    padres[vecino] = actual
-                    cola.append(vecino)
+                    # Creo un nodo inverso, cuyo dato es el nodo vecino, y su padre
+                    # es el nodo inverso actual
+                    nodo_inv = ArbolInverso(vecino, actual)
+                    cola.enqueue(nodo_inv)
 
     return None  # No hay enemigos alcanzables
 
-def reconstruirRuta(padres, inicio, objetivo):
-    ruta = [objetivo]
-    while ruta[-1] != inicio:
-        print(ruta)
-        ruta.append(padres[ruta[-1]])
-    ruta.reverse()
-    return ruta
+def reconstruirRuta(arbol_inverso_fin):
+  p = Pila()
+  aux = arbol_inverso_fin
+  while aux != None and aux.nodo != None:
+    p.push(aux.nodo)
+    aux = aux.padre
 
-def mostrarRuta(ruta):
-    for i in range(len(ruta) - 1):
-        actual = ruta[i]
-        siguiente = ruta[i + 1]
+  return p
 
-        direccion = actual.conex.index(siguiente)
+def mostrarRuta(pila_ubicaciones):
+  ub = pila_ubicaciones.pop()
+  if ub == None:
+    print("No hay enemigos disponibles")
+    return
 
-        texto = ["izquierda", "derecha", "arriba", "abajo"][direccion]
-        print(f"Ve hacia {texto} -> {siguiente.nombre}")
+  # Si el siguiente elemento a imprimir ya no existe,
+  # no imprimo el actual todavia
+  while pila_ubicaciones.top != None:
+    print(f"{ub.nombre} -> ", end="")
+    ub = pila_ubicaciones.pop()
 
-P.ubicActual = aldea
+  # lo imprimo por separado para evitar que quede una flechita sin nada
+  print(ub.nombre)
 
-ruta = bfsHastaEnemigo(P.ubicActual, P.inventario)
+
+ruta = reconstruirRuta( busquedaBFS(ruta2, P.inventario) )
 mostrarRuta(ruta)
+
+while True:
+  try:
+    print("salida comando:", eval(input("-->")))
+  except Exception as e:
+    print(f"error: {e}")
 '''
 
 # buscar el mapa al cual ir para continuar la aventura
@@ -243,3 +272,4 @@ def dfsBuscarEnemigo(origen, inventario):
     return None
 
 #print(dfsBuscarEnemigo(campamento, P.inventario))
+'''

@@ -46,7 +46,8 @@ A partir de ahora comienza tu nueva y divertida aventura\n''')
 print("Presiona ENTER para continuar")
 input()
 
-P = Protagonista(nombre)
+# 100 puntos de salud maxima, 20 puntos de ataque
+P = Protagonista(nombre, 100, 20)
 
 
 
@@ -56,30 +57,30 @@ P = Protagonista(nombre)
 
 # Crear los lugares que componen el mapa
 
-aldea = Ubicacion("Aldea principal",
+aldea = Ubicacion("Aldea principal", "aldea", 
   "Un pequeño poblado rodeado de colinas y bosques. Ultimo " +
   "refugio de calma antes de adentrarse en un mundo corrompido")
 
-lago = Ubicacion("Lago sagrado",
+lago = Ubicacion("Lago sagrado", "lago", 
   "Antigua fuente sagrada cuyas aguas ahora reflejan una " +
   "corrupción silenciosa y profunda.",
   direccionHuida=IZQ)
 
-campamento = Ubicacion("Campamento", 
+campamento = Ubicacion("Campamento", "campam",
   "Puesto de descanso para viajeros, donde confluyen " +
   "advertencias, rumores y las últimas hogueras seguras del mapa")
 
-mazmorra = Ubicacion("Mazmorra",
+mazmorra = Ubicacion("Mazmorra", "mazm",
   "Prisión subterránea de piedra y lamentos, construida para " +
   "encerrar horrores que nunca debieron liberarse",
   direccionHuida=ARR)
 
-castillo = Ubicacion("Castillo antiguo",
+castillo = Ubicacion("Castillo antiguo", "cast",
   "Fortaleza en ruinas atrapada en el tiempo, gobernada por " +
   "ecos de un reino que se niega a desaparecer",
   direccionHuida=ABJ)
 
-bosque = Ubicacion("Bosque encantado",
+bosque = Ubicacion("Bosque encantado", "bosque",
   "El aire es frío y oyes ruidos entre los árboles. Cada árbol " +
   "parece observar al viajero",
   direccionHuida=DER)
@@ -87,26 +88,27 @@ bosque = Ubicacion("Bosque encantado",
 
 # Crear las rutas que conectan los lugares
 
-ruta1 = Ubicacion("Ruta 1",
+ruta1 = Ubicacion("Ruta 1", "ruta1",
   "Camino inicial entre praderas suaves, donde el peligro aún " +
   "parece lejano y la aventura apenas despierta")
-ruta2 = Ubicacion("Ruta 2",
+ruta2 = Ubicacion("Ruta 2", "ruta2",
   "Sendero rocoso dominado por bandidos, primer filtro entre " +
   "la inocencia de la aldea y la crudeza del viaje",
   direccionHuida=IZQ)
-ruta3 = Ubicacion("Ruta 3",
+ruta3 = Ubicacion("Ruta 3", "ruta3",
   "Camino tranquilo en apariencia, donde el viento transporta " +
   "ecos de todo lo que ocurre en las regiones cercanas")
-ruta4 = Ubicacion("Ruta 4",
+ruta4 = Ubicacion("Ruta 4", "ruta4",
   "Sendero estrecho entre rocas y niebla, paso olvidado que " +
   "conecta regiones sin la protección de rutas seguras")
-ruta5 = Ubicacion("Ruta 5",
+ruta5 = Ubicacion("Ruta 5", "ruta5",
   "Paso oscuro vigilado por sombras antiguas, conexión directa " +
   "entre las ruinas del castillo y las tierras olvidadas",
   direccionHuida=ABJ)
-ruta6 = Ubicacion("Ruta 6",
+ruta6 = Ubicacion("Ruta 6", "ruta6",
   "Ruta elevada y solitaria, donde el horizonte anuncia un punto " +
   "de no retorno para el viajero")
+
 
 
 # Establecer sus conexiones bidireccionales
@@ -424,7 +426,11 @@ devolverle la paz al bosque… lo haré. Que este combate sea el
 final de tu tormento.
 ''')
 
-# Parte principal
+
+
+# -----------------------------------
+# LOGICA PRINCIPAL DEL JUEGO
+# --------------------------------
 
 P.ubicActual = aldea
 P.pociones = 3
@@ -447,7 +453,7 @@ while True:
     obj = P.ubicActual.objetoRequerido
     
     if obj is not None:       # si hay algun objeto requerido
-      if not objetoConseguido(obj, P.inventario):  # y el protagonista no lo tiene
+      if not objetoEnInventario(obj, P.inventario):  # y el protagonista no lo tiene
         print(f"Necesitas el objeto '{obj.nombre}' para avanzar por este lugar.")
         print(f"Parece que tendras que regresar y buscarlo en otra parte.")
         P.huir()
@@ -599,20 +605,20 @@ while True:
     print(f"Puntos de salud: {P.salud} de {P.saludMax}\n")
 
     print("         Que deseas hacer?\n")
-    print("stats     : Ver tus estadisticas y objetos")
-    print("pocion    : Usar una pocion para recuperar salud\n")
+    print("stats\t: Ver tus estadisticas y objetos")
+    print("pocion\t: Usar una pocion para recuperar salud\n")
 
     # se muestran las opciones hacia donde moverse
-    if arriba  is not None: print(f"arriba    : Moverte a {arriba.nombre}")
-    if abajo   is not None: print(f"abajo     : Moverte a {abajo.nombre}")
-    if izquier is not None: print(f"izquierda : Moverte a {izquier.nombre}")
-    if derecha is not None: print(f"derecha   : Moverte a {derecha.nombre}")
+    if arriba  is not None: print(f"{arriba.nombre_menu}\t: Moverte hacia arriba a {arriba.nombre}")
+    if abajo   is not None: print(f"{abajo.nombre_menu}\t: Moverte hacia abajo a {abajo.nombre}")
+    if izquier is not None: print(f"{izquier.nombre_menu}\t: Moverte hacia la izquierda a {izquier.nombre}")
+    if derecha is not None: print(f"{derecha.nombre_menu}\t: Moverte hacia la derecha a {derecha.nombre}")
 
     # solo en la ruta 3 se puede comprar
-    if P.ubicActual == ruta3: print("\ncomprar   : Comprar pociones a la curandera")
+    if P.ubicActual == ruta3: print("\ncomprar\t: Comprar pociones a la curandera")
 
-    print("\nayuda     : Por si no sabes que hacer")
-    print("salir     : Salir del juego\n")
+    print("\nayuda\t: Por si no sabes que hacer")
+    print("salir \t: Salir del juego\n")
     opc = input("--> ")
     print()
 
@@ -683,28 +689,19 @@ while True:
       
       input("\nPresiona ENTER para continuar...")
 
-# Mover al protagonista de ubicacion
-
-    elif opc == "arriba" or opc == "abajo" or opc == "derecha" or opc == "izquierda":
-      direc = obtenerNumDireccion(opc)
-      
-      if P.ubicActual.conex[direc] is not None:
-        P.mover(direc)
-      else:
-        print("No hay nada en esa direccion")
-        input("\nPresiona ENTER para continuar...")
-
 # Pedir ayuda sobre la mision actual
     elif opc == "ayuda":
       if completado:
         print("Has completado el juego! Felicidades!")
         print("Puedes seguir explorando el mapa si lo deseas.")
       else:
-        v = ListaEnlazadaSimple()
-        ub = buscarUbicacionMision(P.ubicActual, v, P.inventario)
-        if ub is not None:
-          print(f"Tu siguiente objetivo es llegar a: {ub.nombre}")
-      
+        arbol = busquedaBFS(P.ubicActual, P.inventario)
+        r = reconstruirRuta(arbol)
+
+        print("Debes seguir la siguiente ruta para encontrar al siguiente")
+        print("enemigo:")
+        mostrarRuta(r)
+        
       input("\nPresiona ENTER para continuar...")
 
 
@@ -715,7 +712,16 @@ while True:
       exit()
 
 
-# Opcion no valida
+# Mover al protagonista de ubicacion, comprobando lo que escribio
+# con cada ubicacion colindante
     else:
-      print("Opcion no valida. Asegurate de escribir los comandos en minuscula")
-      input("\nPresiona ENTER para continuar...")
+      error = True
+      for direc in range(4):
+        vecino = P.ubicActual.conex[direc]
+        if vecino != None and opc == vecino.nombre_menu:
+          P.mover(direc)
+          error = False
+
+      if error:
+        print("Opcion no valida. Asegurate de escribir los comandos en minuscula")
+        input("\nPresiona ENTER para continuar...")

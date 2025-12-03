@@ -1,4 +1,8 @@
 from os import system
+from cola import *
+from pila import *
+from listaenlazadasimple import *
+from ArbolInverso import *
 
 
 IZQ = 0
@@ -50,11 +54,13 @@ Buena suerte, viajero!
   input("Presiona ENTER para iniciar la aventura...")
 
 # Limpiar la pantalla de la terminal
+# - Si estas en Windows, cambialo por system("cls")
+# - Si estas en Linux o macOS, cambialo por system("clear")
 def limpiarPantalla():
-  system("cls")
+  system("clear")
 
 # Ver si un objeto clave ya fue conseguido
-def objetoConseguido(objeto, listaobjetos):
+def objetoEnInventario(objeto, listaobjetos):
   return listaobjetos.buscar(objeto.nombre) != None
 
 # Pedir un numero al usuario, con manejo de errores
@@ -104,10 +110,24 @@ def esTransitable(ubicacion, inventario):
   obj = ubicacion.objetoRequerido
   if obj is None:
     return True
-  return objetoConseguido(obj, inventario)
+  return objetoEnInventario(obj, inventario)
 
-# buscar el mapa al cual ir para continuar la aventura
-def buscarUbicacionMision(actual, visitados, inventario):
+
+# ----------------------------
+# Algoritmos de busqueda
+#-----------------------------
+# En este juego, se usan para saber hacia que mapa debe moverse
+# el protagonista para encontrar al siguiente enemigo.
+# El protagonista no puede pasar por algunos mapas porque
+# requieren un objeto clave que el protagonista podria no
+# tener todavía, así que se tiene en cuenta esta
+# restriccion.
+
+
+# algoritmo DFS (Depth First Search). Solo
+# Permite saber el nombre de dicha ubicacion,
+# mas no la ruta completa
+def busquedaDFS(actual, visitados, inventario):
   visitados.insertarFinal(actual)
 
   if actual.hayEnemigos():
@@ -117,7 +137,71 @@ def buscarUbicacionMision(actual, visitados, inventario):
     vecino = actual.conex[i]
     if vecino != None and visitados.buscar(vecino) == None:
       if esTransitable(vecino, inventario):
-        busc = buscarUbicacionMision(vecino, visitados, inventario)
-        if busc != None:
-          return busc
+        encontrado = buscarUbicacionMision(vecino, visitados, inventario)
+        if encontrado:
+          return encontrado
   return None
+
+
+# algoritmo BFS (Breadth First Search)
+# Devuelve un arbol con el que se puede reconstruir la ruta
+# completa mas cercana
+
+def busquedaBFS(origen, inventario):
+    cola = Cola()              # cola de nodos pendientes por visitar
+    visitados = ListaEnlazadaSimple()  # lista de nodos visitados
+    nodo_inverso_padre = ArbolInverso(origen, None)  # Dato: ubicacion origen, Padre: None
+    visitados.insertarFinal(origen)
+
+    # en la cola no voy a meter directamente el nodo origen, sino
+    # que lo voy a "encapsular" en la clase nodo inverso, para
+    # no perder la referencia a cada nodo padre.
+    cola.enqueue(nodo_inverso_padre)
+
+    while not cola.isEmpty():   # mientras no quede nada por visitar
+        actual = cola.dequeue()
+
+        # Si aquí hay enemigos, terminamos la busqueda
+        if actual.nodo.hayEnemigos():
+            return actual
+
+        # examino las direcciones
+        for i in range(0,4):
+            vecino = actual.nodo.conex[i]
+            if (vecino is not None) and (visitados.buscar(vecino) is None):
+                if esTransitable(vecino, inventario):
+                    visitados.insertarFinal(vecino)
+                    # Creo un nodo inverso, cuyo dato es el nodo vecino, y su padre
+                    # es el nodo inverso actual
+                    nodo_inv = ArbolInverso(vecino, actual)
+                    cola.enqueue(nodo_inv)
+
+    return None  # No hay enemigos alcanzables
+
+# Toma el arbol resultante, y reconstruye la ruta completa,
+# devolviendola en una pila
+def reconstruirRuta(arbol_inverso_fin):
+  p = Pila()
+  aux = arbol_inverso_fin
+  while aux != None and aux.nodo != None:
+    p.push(aux.nodo)
+    aux = aux.padre
+
+  return p
+
+# Toma la pila e imprime, en orden, las ubicaciones
+# desde la actual hasta la ultima
+def mostrarRuta(pila_ubicaciones):
+  ub = pila_ubicaciones.pop()
+  if ub == None:
+    print("No hay enemigos disponibles")
+    return
+
+  # Si el siguiente elemento a imprimir ya no existe,
+  # no imprimo el actual todavia
+  while pila_ubicaciones.top != None:
+    print(f"{ub.nombre} -> ", end="")
+    ub = pila_ubicaciones.pop()
+
+  # lo imprimo por separado para evitar que quede una flechita sin nada
+  print(ub.nombre)

@@ -10,11 +10,11 @@ derrotados, un arreglo con el inventario de objetos,
 el numero de objetos y la ubicacion actual.'''
 
 class Protagonista:
-  def __init__(self, nombre):
+  def __init__(self, nombre, saludMax, atk):
     self.nombre=nombre
     self.XP=0
-    self.saludMax = 100
-    self.salud=100
+    self.saludMax = saludMax
+    self.salud=saludMax
     self.lugaresVisitados=0
     self.enemDerrotados=0
     self.monedas  = 0
@@ -22,7 +22,7 @@ class Protagonista:
     self.inventario = ListaObjetosClave()
     self.ubicActual = None
     self.discursos = [0] * 11
-    self.atk = 40
+    self.atk = atk
     
     for i in range(0, 11):
       self.discursos[i] = ListaEnlazadaSimple()
