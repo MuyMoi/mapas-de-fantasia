@@ -86,6 +86,26 @@ def verDialogo(protagonista, personaje):
   discurso1.reiniciar_ptr()
   discurso2.reiniciar_ptr()
 
+def usarPocion(prota, poderpocion):
+  if prota.pociones <= 0:
+    print("No te quedan pociones!")
+    return False
+  if prota.salud == prota.saludMax:
+    print("Tu salud ya esta al maximo!")
+    print("No has gastado la pocion.")
+    print(f"Te quedan {prota.pociones} pociones.")
+    return False
+  
+  prota.salud += poderpocion    # sumar puntos de salud
+  prota.pociones -= 1
+  if prota.salud > prota.saludMax:
+    prota.salud = prota.saludMax   # limitar a salud maxima
+  print(f"Has usado una pocion y recuperado {poderpocion} puntos de salud.")
+  print(f"Te quedan {prota.pociones} pociones.")
+  print(f"Tu salud actual es {prota.salud}.")
+  return True
+
+
 # Ver el mensaje final al completar la aventura
 def verMensajeFinal(prota):
   print(f'''    Felicitaciones, {prota.nombre}!

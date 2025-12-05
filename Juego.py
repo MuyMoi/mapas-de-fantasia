@@ -441,7 +441,7 @@ while True:
 # Se limpia la pantalla y se muestra la ubicacion actual
 
   limpiarPantalla()
-  print(f"Estas actualmente en {P.ubicActual.nombre}")
+  print(f"Estas actualmente en {P.ubicActual.nombre}\n")
   print(P.ubicActual.descrip)
   print("\n-------------------------------------------------\n")
 
@@ -471,8 +471,8 @@ while True:
     # evitar pelear y seguir con la aventura
     if P.ubicActual == mazmorra:
       monedas = 10
-      print(f"Deseas pagar {monedas} para evitar pelear con el carcelero?")
-      print(f"Tiene {enem.saludMax} de salud")
+      print(f"Deseas pagar {monedas} monedas para evitar pelear con el carcelero?")
+      print(f"El tiene {enem.saludMax} de salud, asi que piensalo bien.")
       opc = ""
       while True:
         opc = input("si | no -->")
@@ -516,10 +516,11 @@ while True:
         #Combate por turnos simple
         print(f"\nTu salud: {P.salud}  |  Salud de {enem.nombre}: {enem.salud}")
         print("\nElige una accion:")
-        print(" atacar | pocion")
+        print(" atk | pocion")
         opc2 = input("-->")
 
-        if opc2 == "atacar":
+        if opc2 == "atk":
+          # El ataque del protagonista es aleatorio dentro de un rango
           damage = randint(P.atk - 10, P.atk + 5)
           enem.salud -= damage
           print(f"Has causado {damage} puntos de daño a {enem.nombre}")
@@ -545,25 +546,16 @@ while True:
             break
 
         elif opc2 == "pocion":
-          if P.pociones <= 0:
-            print("No te quedan pociones!")
-            continue
-          if P.salud == P.saludMax:
-            print("Tu salud ya esta al maximo!")
-            continue
-
-          P.salud += poderpocion   # sumar puntos de salud
-          P.pociones -= 1 # reducir el numero de pociones
-          if P.salud > P.saludMax:
-            P.salud = P.saludMax  # limitar la salud maxima
-          print(f"Has usado una pocion y recuperado {poderpocion} puntos de salud.")
-          print(f"Te quedan {P.pociones} pociones.")
+          usada = usarPocion(P, poderpocion)
+          if not usada:
+            continue  # volver al menu de combate si no se uso pocion
 
         else:
           print("Opcion no valida")
           continue
 
         # Turno del enemigo
+        # El ataque del enemigo es aleatorio dentro de un rango
         damage = randint(enem.atk - 5, enem.atk + 5)
         P.salud -= damage
         print(f"{enem.nombre} te ha causado {damage} puntos de daño.")
@@ -609,10 +601,14 @@ while True:
     print("pocion\t: Usar una pocion para recuperar salud\n")
 
     # se muestran las opciones hacia donde moverse
-    if arriba  is not None: print(f"{arriba.nombre_menu}\t: Moverte hacia arriba a {arriba.nombre}")
-    if abajo   is not None: print(f"{abajo.nombre_menu}\t: Moverte hacia abajo a {abajo.nombre}")
-    if izquier is not None: print(f"{izquier.nombre_menu}\t: Moverte hacia la izquierda a {izquier.nombre}")
-    if derecha is not None: print(f"{derecha.nombre_menu}\t: Moverte hacia la derecha a {derecha.nombre}")
+    if arriba  is not None:
+      print(f"{arriba.nombre_menu}\t: ⬆ Moverte hacia arriba a {arriba.nombre}")
+    if abajo   is not None:
+      print(f"{abajo.nombre_menu}\t: ↓ Moverte hacia abajo a {abajo.nombre}")
+    if izquier is not None:
+      print(f"{izquier.nombre_menu}\t: ← Moverte hacia la izquierda a {izquier.nombre}")
+    if derecha is not None:
+      print(f"{derecha.nombre_menu}\t: → Moverte hacia la derecha a {derecha.nombre}")
 
     # solo en la ruta 3 se puede comprar
     if P.ubicActual == ruta3: print("\ncomprar\t: Comprar pociones a la curandera")
@@ -635,20 +631,7 @@ while True:
 # Usar una pocion para recuperar salud
 
     elif opc == "pocion":
-      if P.pociones <= 0:
-        print("No te quedan pociones!")
-      elif P.salud == 100:
-        print("Tu salud ya esta al maximo!")
-        print("No has gastado la pocion.")
-      else:
-        P.salud += poderpocion    # sumar puntos de salud
-        P.pociones -= 1
-        if P.salud > 100:
-          P.salud = 100
-        print(f"Has usado una pocion y recuperado {poderpocion} puntos de salud.")
-        print(f"Te quedan {P.pociones} pociones.")
-
-      print(f"Tu salud actual es {P.salud}.")
+      usarPocion(P, poderpocion)
       input("\nPresiona ENTER para continuar...")
 
 # Comprar pociones a la curandera
