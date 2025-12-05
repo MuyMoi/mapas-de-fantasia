@@ -1,3 +1,4 @@
+import platform
 from os import system
 from cola import *
 from pila import *
@@ -53,11 +54,13 @@ Buena suerte, viajero!
 ''')
   input("Presiona ENTER para iniciar la aventura...")
 
-# Limpiar la pantalla de la terminal
-# - Si estas en Windows, cambialo por system("cls")
-# - Si estas en Linux o macOS, cambialo por system("clear")
+# Limpiar la pantalla de la terminal. Para ello comprueba
+# el sistema operativo, para ejecutar el comando correcto
 def limpiarPantalla():
-  system("clear")
+  if platform.system() == "Windows":
+    system("cls")
+  else:
+    system("clear")
 
 # Ver si un objeto clave ya fue conseguido
 def objetoEnInventario(objeto, listaobjetos):
