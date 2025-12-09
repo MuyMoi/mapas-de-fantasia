@@ -186,7 +186,7 @@ bosque.enem_pend.enqueue(lobo)
 #SABIO (id=0)
 
 sabio.discursos.insertarFinal(
-'''Ah… así que al fin has despertado, viajero.
+f'''Ah… así que al fin has despertado, viajero.
 Primero que nada, dime: como te llamas?
 ''')
 P.discursos[0].insertarFinal(
@@ -214,7 +214,7 @@ volveré en absoluto.
 # ESPIRITU DEL LAGO (id=1)
 
 espiritu.discursos.insertarFinal(
-'''Durante siglos fui guardián de aguas puras, reflejo del cielo y
+f'''Durante siglos fui guardián de aguas puras, reflejo del cielo y
 alivio de los vivos… hasta que los hombres arrojaron su ambición
 a mis entrañas. Ahora solo queda eco, veneno y lamentos. Tú no eres
 distinto a los demás. Vienes buscando poder, respuestas o gloria,
@@ -224,7 +224,7 @@ propios deseos. Si avanzas, tu reflejo será lo último que veas antes
 de perderte conmigo en el fondo.
 ''')
 P.discursos[1].insertarFinal(
-'''No busco corromper lo que queda de este lugar. Pero tampoco
+f'''No busco corromper lo que queda de este lugar. Pero tampoco
 retrocederé. Si tu dolor es lo que te convirtió en esto, entonces te
 liberaré… aunque tenga que enfrentar tu furia. El lago puede haber
 sido manchado, pero aún puede ser salvado.
@@ -233,14 +233,14 @@ sido manchado, pero aún puede ser salvado.
 # SAQUEADOR (2)
 
 saqueador.discursos.insertarFinal(
-'''Je… otro viajero más saliendo de la Aldea creyéndose héroe. Todos
+f'''Je… otro viajero más saliendo de la Aldea creyéndose héroe. Todos
 caminan con la espalda recta cuando aún no saben cuánto pesa el miedo.
 Esta ruta ya no pertenece a los aldeanos, ahora es mía. Aquí caen los
 que viajan confiados, los que creen en cuentos del Sabio Anciano y en
 finales felices.
 ''')
 P.discursos[2].insertarFinal(
-'''Yo se que este mundo no es justo. Pero no permitire que
+f'''Yo se que este mundo no es justo. Pero no permitire que
 conviertas el miedo en tu ley. Si esta es la prueba para dejar atrás
 la Aldea, la aceptaré. Hazte a un lado o serás solo otro obstáculo en
 mi camino.
@@ -249,7 +249,7 @@ mi camino.
 #EXPLORADORA ERRANTE: (3)
 
 exploradora.discursos.insertarFinal(
-'''No esperaba ver a alguien nuevo por estos caminos. Normalmente
+f'''No esperaba ver a alguien nuevo por estos caminos. Normalmente
 solo pasan comerciantes desesperados o guerreros que no regresan.
 Yo vigilo este campamento para quienes se atreven a cruzar el
 corazón  del  mapa.  Si  sigues  adelante,  guarda provisiones,
@@ -257,19 +257,19 @@ guarda fuerzas… y guarda recuerdos. A veces eso es lo único que
 regresa contigo.
 ''')
 P.discursos[3].insertarFinal(
-'''No pensé encontrar a alguien tan lejos de la aldea. Gracias por
+f'''No pensé encontrar a alguien tan lejos de la aldea. Gracias por
 la hospitalidad. Tu advertencia no caerá en oídos sordos. Seguiré
 adelante, pero lo haré con cautela. Quizás, cuando todo termine,
 este campamento ya no sea solo un lugar de paso.
 ''')
 exploradora.discursos.insertarFinal(
-'''Espera! Se me olvido decirte. Hay una curandera por aqui cerca,
+f'''Espera! Se me olvido decirte. Hay una curandera por aqui cerca,
 en la ruta 3, que vende pociones. Deberias ir a verla, porque es
 posible que sin las pociones no puedas vencer a los enemigos que
 hay por aquí.
 ''')
 P.discursos[3].insertarFinal(
-'''Gracias por decirme. Me pasaré por allí.
+f'''Gracias por decirme. Me pasaré por allí.
 ''')
 
 # VIGIA DE LAS SOMBRAS (4)
@@ -285,7 +285,7 @@ pero la oscuridad me reclamó cuando mis juramentos se rompieron. Ahora
 ''')
 
 P.discursos[4].insertarFinal(
-'''Entonces eres una advertencia viviente… lo que ocurre cuando uno se
+f'''Entonces eres una advertencia viviente… lo que ocurre cuando uno se
 arrodilla ante la oscuridad. No vine hasta aquí para huir ante sombras
 del pasado. Si el castillo encierra un mal, lo enfrentaré. Y si debo
 cruzarte para hacerlo, que así sea. Tu vigilia termina hoy.
@@ -294,33 +294,33 @@ cruzarte para hacerlo, que así sea. Tu vigilia termina hoy.
 # CURANDERA (5)
 
 curandera.discursos.insertarFinal(
-'''No temas, viajero. Pocos se detienen en esta
+f'''No temas, viajero. Pocos se detienen en esta
 ruta sin estar heridos… por fuera o por dentro. Yo decidí quedarme 
 para ayudar a quienes aún creen que se puede avanzar sin perder 
 del todo la esperanza.
 ''')
 
 P.discursos[5].insertarFinal(
-'''No imaginaba encontrar calma en medio del camino. 
+f'''No imaginaba encontrar calma en medio del camino. 
 Seguiré adelante con más cuidado… y con más fe. Quizás no pueda 
 salvarlo todo, pero haré lo posible por no perderme a mí mismo.
 ''')
 
 curandera.discursos.insertarFinal(
-'''Aquí me quedare para cuando necesites comprar pociones. Pero
+f'''Aquí me quedare para cuando necesites comprar pociones. Pero
 te recomiendo que no gastes todo tu dinero en pociones. Guarda
 monedas por si alguien te las pide. Que tengas buena suerte, viajero.
 ''')
 
 P.discursos[5].insertarFinal(
-'''De acuerdo: trataré de ser mesurado con las monedas que cargo.
+f'''De acuerdo: trataré de ser mesurado con las monedas que cargo.
 Gracias por tus palabras y por tu ayuda. 
 ''')
 
 # CARCELERO (6)
 
 carcelero.discursos.insertarFinal(
-'''Yo fui un guardián, como tantos otros, hasta que 
+f'''Yo fui un guardián, como tantos otros, hasta que 
 comprendí que las puertas no solo retenían monstruos… también 
 protegían al mundo de ellos. Cuando mis hermanos huyeron, 
 yo me quedé. La soledad me consumió, la oscuridad me enseñó 
@@ -329,26 +329,26 @@ cruzas esta sala, te convertirás en parte del encierro eterno
 ''')
 
 P.discursos[6].insertarFinal(
-'''Tal vez fuiste un héroe alguna vez, pero ahora solo eres una sombra 
+f'''Tal vez fuiste un héroe alguna vez, pero ahora solo eres una sombra 
 de lo que eras. No vine a liberar horrores, sino a terminar con ellos. 
 Si este es el precio para que nadie más caiga en esta prisión, lo 
 pagaré.
 ''')
 
 carcelero.discursos.insertarFinal(
-'''Esta bien, joven. Ya que dijiste que pagarás, podemos terminar 
+f'''Esta bien, joven. Ya que dijiste que pagarás, podemos terminar 
 esto por las buenas o por las malas. Si me das algunas monedas, con gusto 
 me iré de este lugar. O sino, sufriras el poder de mi espada.
 ''')
 
 P.discursos[6].insertarFinal(
-'''Dejame pensar...
+f'''Dejame pensar...
 ''')
 
 # REY DEL OCASO (7)
 
 rey.discursos.insertarFinal(
-'''¿Así que has logrado atravesar rutas, sombras y guardianes para 
+f'''¿Así que has logrado atravesar rutas, sombras y guardianes para 
 llegar hasta mi trono en ruinas? Hace siglos defendí este reino con 
 honor, pero cuando el mundo me dio la espalda, solo la oscuridad 
 respondió a mi llamado. Mis súbditos huyeron, mis muros cayeron… pero 
@@ -360,7 +360,7 @@ esperanza, solo un rey que se niega a desaparecer.
 ''')
 
 P.discursos[7].insertarFinal(
-'''Este castillo ya no es un reino, es una tumba. Aferrarte al pasado 
+f'''Este castillo ya no es un reino, es una tumba. Aferrarte al pasado 
 te convirtió en prisionero de tu propia corona. No vine a destronar 
 a un rey, sino a liberar a este lugar de su maldición.
 ''')
@@ -368,7 +368,7 @@ a un rey, sino a liberar a este lugar de su maldición.
 # GUARDIAN LIBERADO (8)
 
 guardian.discursos.insertarFinal(
-'''…Así que al fin terminó. Durante años incontables estuve atrapado 
+f'''…Así que al fin terminó. Durante años incontables estuve atrapado 
 entre estas paredes, viendo al rey convertirse en algo que ya no era 
 humano. Yo fui su capitán, su sombra en la guerra, su último fiel. 
 Cuando el reino cayó, juré protegerlo incluso de sí mismo… y ese 
@@ -381,14 +381,14 @@ pueden convertirse en prisiones.
 ''')
 
 P.discursos[8].insertarFinal(
-'''No luché por gloria, sino para que este lugar pudiera descansar. 
+f'''No luché por gloria, sino para que este lugar pudiera descansar. 
 Cumpliste tu deber hasta el final, capitán. Ahora eres libre.
 ''')
 
 # VIGIA DEL HORIZONTE (9)
 
 vigiahoriz.discursos.insertarFinal(
-'''No muchos llegan hasta aquí sin cargar cicatrices… visibles o no. 
+f'''No muchos llegan hasta aquí sin cargar cicatrices… visibles o no. 
 Ruta 6 es el último respiro antes de que el mundo se vuelva más oscuro. 
 Yo observo desde esta colina desde hace años, buscando señales de que 
 el ciclo por fin cambiará. He visto pasar héroes, bandidos, reyes 
@@ -400,7 +400,7 @@ que buscas también te está buscando.
 ''')
 
 P.discursos[9].insertarFinal(
-'''Entonces no soy el único que siente ese llamado. He llegado 
+f'''Entonces no soy el único que siente ese llamado. He llegado 
 demasiado lejos para dudar ahora. Gracias por tu advertencia, vigía. 
 Si vuelvo a pasar por aquí, espero que sea con el mundo un poco más 
 libre que hoy.
@@ -409,21 +409,21 @@ libre que hoy.
 # LOBO SOMBRIO (10)
 
 lobo.discursos.insertarFinal(
-'''Huelo tu miedo desde que cruzaste las raíces del bosque, {P.nombre} ..., aunque 
-intentes ocultarlo con valor. Yo no nací como sombra. Fui guardián de 
-estas tierras cuando aún estaban llenas de luz. Cazaba para proteger, 
-no para destruir. Pero la magia torcida del Castillo y la codicia de 
-los hombres envenenaron el bosque… y a mí con él. Ahora soy el colmillo 
-de su rencor, el aullido que anuncia que nadie cruza este lugar sin 
-pagar un precio. No lucho por maldad, viajero. Lucho porque ya no sé 
-vivir de otra forma.
+f'''Huelo tu miedo desde que cruzaste las raíces del bosque,
+{P.nombre} ..., aunque intentes ocultarlo con valor. Yo no nací
+como sombra. Fui guardián de estas tierras cuando aún estaban llenas
+de luz. Cazaba para proteger, no para destruir. Pero la magia
+torcida del Castillo y la codicia de los hombres envenenaron el
+bosque… y a mí con él. Ahora soy el colmillo de su rencor, el
+aullido que anuncia que nadie cruza este lugar sin pagar un precio.
+No lucho por maldad, viajero. Lucho porque ya no sé vivir de otra forma.
 ''')
 
 P.discursos[10].insertarFinal(
-'''Entonces aún queda algo de ti bajo esa oscuridad. No vine a cazar un 
-animal, sino a romper una maldición. Si debo enfrentarte para 
-devolverle la paz al bosque… lo haré. Que este combate sea el 
-final de tu tormento.
+f'''Entonces aún queda algo de ti bajo esa oscuridad. No
+vine a cazar un animal, sino a romper una maldición. Si debo
+enfrentarte para devolverle la paz al bosque… lo haré. Que este
+combate sea el final de tu tormento.
 ''')
 
 
